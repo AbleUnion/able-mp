@@ -14,7 +14,7 @@
 * [ ] 엔더 월드
 * [ ] 몹 스포너
 * [ ] 1.1.X 블럭들
-* [ ] 
+* [X] 모든  자동로드
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
