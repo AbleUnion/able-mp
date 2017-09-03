@@ -7,9 +7,9 @@
 * [X] mob ai
 * [X] 마인카트
 * [X] 날씨
-* [O] 레드스톤
-* [O] 인첸트 기능
-* [O] 보트
+* [ ] 레드스톤
+* [ ] 인첸트 기능
+* [ ] 보트
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
@@ -30,9 +30,9 @@
 * [X] mob ai
 * [X] minecart
 * [X] wethers
-* [O] redstone
-* [O] enchant
-* [O] boat
+* [ ] redstone
+* [ ] enchant
+* [ ] boat
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
