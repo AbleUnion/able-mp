@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,17 +15,21 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-class UseItemPacket extends DataPacket {
+use pocketmine\item\Item;
+use pocketmine\network\mcpe\NetworkSession;
 
+class UseItemPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::USE_ITEM_PACKET;
 
 	public $x;
@@ -33,7 +37,6 @@ class UseItemPacket extends DataPacket {
 	public $z;
 	public $blockId;
 	public $face;
-	public $item;
 	public $fx;
 	public $fy;
 	public $fz;
@@ -41,12 +44,11 @@ class UseItemPacket extends DataPacket {
 	public $posY;
 	public $posZ;
 	public $slot;
+	/** @var Item */
+	public $item;
 
-	/**
-	 *
-	 */
-	public function decode(){
-		$this->getBlockCoords($this->x, $this->y, $this->z);
+	public function decodePayload(){
+		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->blockId = $this->getUnsignedVarInt();
 		$this->face = $this->getVarInt();
 		$this->getVector3f($this->fx, $this->fy, $this->fz);
@@ -55,18 +57,17 @@ class UseItemPacket extends DataPacket {
 		$this->item = $this->getSlot();
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-
+	public function encodePayload(){
+		$this->putUnsignedVarInt($this->blockId);
+		$this->putUnsignedVarInt($this->face);
+		$this->putVector3f($this->fx, $this->fy, $this->fz);
+		$this->putVector3f($this->posX, $this->posY, $this->posZ);
+		$this->putVarInt($this->slot);
+		$this->putSlot($this->item);
 	}
 
-	/**
-	 * @return PacketName|string
-	 */
-	public function getName(){
-		return "UseItemPacket";
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleUseItem($this);
 	}
 
 }

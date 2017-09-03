@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,16 +15,19 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-class LevelSoundEventPacket extends DataPacket {
+use pocketmine\network\mcpe\NetworkSession;
 
+class LevelSoundEventPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::LEVEL_SOUND_EVENT_PACKET;
 
 	const SOUND_ITEM_USE_ON = 0;
@@ -143,38 +146,27 @@ class LevelSoundEventPacket extends DataPacket {
 	public $extraData = -1;
 	public $pitch = 1;
 	public $unknownBool = false;
-	public $unknownBool2 = false;
+	public $disableRelativeVolume = false;
 
-	/**
-	 *
-	 */
-	public function decode(){
+	public function decodePayload(){
 		$this->sound = $this->getByte();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->extraData = $this->getVarInt();
 		$this->pitch = $this->getVarInt();
 		$this->unknownBool = $this->getBool();
-		$this->unknownBool2 = $this->getBool();
+		$this->disableRelativeVolume = $this->getBool();
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-		$this->reset();
+	public function encodePayload(){
 		$this->putByte($this->sound);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->extraData);
 		$this->putVarInt($this->pitch);
 		$this->putBool($this->unknownBool);
-		$this->putBool($this->unknownBool2);
+		$this->putBool($this->disableRelativeVolume);
 	}
 
-	/**
-	 * @return PacketName|string
-	 */
-	public function getName(){
-		return "LevelSoundEventPacket";
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleLevelSoundEvent($this);
 	}
-
 }

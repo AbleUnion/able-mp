@@ -2,38 +2,36 @@
 
 /*
  *
- *  _____            _               _____           
- * / ____|          (_)             |  __ \          
- *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
- *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
- *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
- * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
- *                         __/ |                    
- *                        |___/                     
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author GenisysPro
- * @link https://github.com/GenisysPro/GenisysPro
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-class LoginPacket extends DataPacket {
+use pocketmine\network\mcpe\NetworkSession;
+
+class LoginPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::LOGIN_PACKET;
 
-	const MOJANG_PUBKEY = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
-
 	const EDITION_POCKET = 0;
-
 
 	public $username;
 	public $protocol;
@@ -43,64 +41,50 @@ class LoginPacket extends DataPacket {
 	public $identityPublicKey;
 	public $serverAddress;
 
-	public $skinId = null;
-	public $skin = null;
+	public $skinId;
+	public $skin = "";
 
+	/** @var array (the "chain" index contains one or more JWTs) */
+	public $chainData = [];
+	/** @var string */
+	public $clientDataJwt;
+	/** @var array decoded payload of the clientData JWT */
 	public $clientData = [];
 
-	public $deviceModel;
-	public $deviceOS;
+	public function canBeSentBeforeLogin() : bool{
+		return true;
+	}
 
-	/**
-	 *
-	 */
-	public function decode(){
+	public function decodePayload(){
 		$this->protocol = $this->getInt();
+
 		if(!in_array($this->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
 			$this->buffer = null;
-			return;
+			return; //Do not attempt to decode for non-accepted protocols
 		}
 
 		$this->gameEdition = $this->getByte();
 
 		$this->setBuffer($this->getString(), 0);
 
-		$time = time();
-
-		$chainData = json_decode($this->get($this->getLInt()))->{"chain"};
-		// Start with the trusted one
-		$chainKey = self::MOJANG_PUBKEY;
-		while(!empty($chainData)){
-			foreach($chainData as $index => $chain){
-				list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
-				if(isset($webtoken["extraData"])){
-					if(isset($webtoken["extraData"]["displayName"])){
-						$this->username = $webtoken["extraData"]["displayName"];
-					}
-					if(isset($webtoken["extraData"]["identity"])){
-						$this->clientUUID = $webtoken["extraData"]["identity"];
-					}
+		$this->chainData = json_decode($this->get($this->getLInt()), true);
+		foreach($this->chainData["chain"] as $chain){
+			$webtoken = $this->decodeToken($chain);
+			if(isset($webtoken["extraData"])){
+				if(isset($webtoken["extraData"]["displayName"])){
+					$this->username = $webtoken["extraData"]["displayName"];
 				}
-				if($verified){
-					$verified = isset($webtoken["nbf"]) && $webtoken["nbf"] <= $time && isset($webtoken["exp"]) && $webtoken["exp"] > $time;
+				if(isset($webtoken["extraData"]["identity"])){
+					$this->clientUUID = $webtoken["extraData"]["identity"];
 				}
-				if($verified and isset($webtoken["identityPublicKey"])){
-					// Looped key chain. #blamemojang
-					if($webtoken["identityPublicKey"] != self::MOJANG_PUBKEY) $chainKey = $webtoken["identityPublicKey"];
-					break;
-				}elseif($chainKey === null){
-					// We have already gave up
-					break;
+				if(isset($webtoken["identityPublicKey"])){
+					$this->identityPublicKey = $webtoken["identityPublicKey"];
 				}
-			}
-			if(!$verified && $chainKey !== null){
-				$chainKey = null;
-			}else{
-				unset($chainData[$index]);
 			}
 		}
 
-		list($verified, $this->clientData) = $this->decodeToken($this->get($this->getLInt()), $chainKey);
+		$this->clientDataJwt = $this->get($this->getLInt());
+		$this->clientData = $this->decodeToken($this->clientDataJwt);
 
 		$this->clientId = $this->clientData["ClientRandomId"] ?? null;
 		$this->serverAddress = $this->clientData["ServerAddress"] ?? null;
@@ -109,64 +93,19 @@ class LoginPacket extends DataPacket {
 		if(isset($this->clientData["SkinData"])){
 			$this->skin = base64_decode($this->clientData["SkinData"]);
 		}
-
-		if(isset($this->clientData["DeviceModel"])){
-			$this->deviceModel = $this->clientData["DeviceModel"];
-		}
-
-		if(isset($this->clientData["DeviceOS"])){
-			$this->deviceOS = $this->clientData["DeviceOS"];
-		}
-
-		if($verified){
-			$this->identityPublicKey = $chainKey;
-		}
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-
+	public function encodePayload(){
+		//TODO
 	}
 
-	/**
-	 * @param $token
-	 * @param $key
-	 *
-	 * @return array
-	 */
-	public function decodeToken($token, $key){
-		$tokens = explode(".", $token);
-		list($headB64, $payloadB64, $sigB64) = $tokens;
+	public function decodeToken($token){
+		list($headB64, $payloadB64, $sigB64) = explode(".", $token);
 
-		if($key !== null and extension_loaded("openssl")){
-			$sig = base64_decode(strtr($sigB64, '-_', '+/'), true);
-			$rawLen = 48; // ES384
-			for($i = $rawLen; $i > 0 and $sig[$rawLen - $i] == chr(0); $i--){
-			}
-			$j = $i + (ord($sig[$rawLen - $i]) >= 128 ? 1 : 0);
-			for($k = $rawLen; $k > 0 and $sig[2 * $rawLen - $k] == chr(0); $k--){
-			}
-			$l = $k + (ord($sig[2 * $rawLen - $k]) >= 128 ? 1 : 0);
-			$len = 2 + $j + 2 + $l;
-			$derSig = chr(48);
-			if($len > 255){
-				throw new \RuntimeException("Invalid signature format");
-			}elseif($len >= 128){
-				$derSig .= chr(81);
-			}
-			$derSig .= chr($len) . chr(2) . chr($j);
-			$derSig .= str_repeat(chr(0), $j - $i) . substr($sig, $rawLen - $i, $i);
-			$derSig .= chr(2) . chr($l);
-			$derSig .= str_repeat(chr(0), $l - $k) . substr($sig, 2 * $rawLen - $k, $k);
-
-			$verified = openssl_verify($headB64 . "." . $payloadB64, $derSig, "-----BEGIN PUBLIC KEY-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END PUBLIC KEY-----\n", OPENSSL_ALGO_SHA384) === 1;
-		}else{
-			$verified = false;
-		}
-
-		return [$verified, json_decode(base64_decode($payloadB64), true)];
+		return json_decode(base64_decode($payloadB64), true);
 	}
 
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleLogin($this);
+	}
 }

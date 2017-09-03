@@ -19,14 +19,19 @@
  *
 */
 
+declare(strict_types=1);
+
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-use pocketmine\resourcepacks\ResourcePack;
 
-class ResourcePackStackPacket extends DataPacket {
+use pocketmine\network\mcpe\NetworkSession;
+use pocketmine\resourcepacks\ResourcePack;
+use pocketmine\resourcepacks\ResourcePackInfoEntry;
+
+class ResourcePackStackPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::RESOURCE_PACK_STACK_PACKET;
 
 	public $mustAccept = false;
@@ -36,31 +41,24 @@ class ResourcePackStackPacket extends DataPacket {
 	/** @var ResourcePack[] */
 	public $resourcePackStack = [];
 
-	/**
-	 *
-	 */
-	public function decode(){
+	public function decodePayload(){
 		/*$this->mustAccept = $this->getBool();
-		$behaviorPackCount = $this->getLShort();
+		$behaviorPackCount = $this->getUnsignedVarInt();
 		while($behaviorPackCount-- > 0){
-		    $packId = $this->getString();
-		    $version = $this->getString();
-		    $this->behaviorPackStack[] = new ResourcePackInfoEntry($packId, $version);
+			$packId = $this->getString();
+			$version = $this->getString();
+			$this->behaviorPackStack[] = new ResourcePackInfoEntry($packId, $version);
 		}
 
-		$resourcePackCount = $this->getLShort();
+		$resourcePackCount = $this->getUnsignedVarInt();
 		while($resourcePackCount-- > 0){
-		    $packId = $this->getString();
-		    $version = $this->getString();
-		    $this->resourcePackStack[] = new ResourcePackInfoEntry($packId, $version);
+			$packId = $this->getString();
+			$version = $this->getString();
+			$this->resourcePackStack[] = new ResourcePackInfoEntry($packId, $version);
 		}*/
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-		$this->reset();
+	public function encodePayload(){
 		$this->putBool($this->mustAccept);
 
 		$this->putUnsignedVarInt(count($this->behaviorPackStack));
@@ -74,5 +72,9 @@ class ResourcePackStackPacket extends DataPacket {
 			$this->putString($entry->getPackId());
 			$this->putString($entry->getPackVersion());
 		}
+	}
+
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleResourcePackStack($this);
 	}
 }

@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,17 +15,20 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-class TextPacket extends DataPacket {
+use pocketmine\network\mcpe\NetworkSession;
 
+class TextPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::TEXT_PACKET;
 
 	const TYPE_RAW = 0;
@@ -35,22 +38,21 @@ class TextPacket extends DataPacket {
 	const TYPE_TIP = 4;
 	const TYPE_SYSTEM = 5;
 	const TYPE_WHISPER = 6;
+	const TYPE_ANNOUNCEMENT = 7;
 
 	public $type;
 	public $source;
 	public $message;
 	public $parameters = [];
 
-	/**
-	 *
-	 */
-	public function decode(){
+	public function decodePayload(){
 		$this->type = $this->getByte();
 		switch($this->type){
 			case self::TYPE_POPUP:
 			case self::TYPE_CHAT:
-				/** @noinspection PhpMissingBreakStatementInspection */
 			case self::TYPE_WHISPER:
+			/** @noinspection PhpMissingBreakStatementInspection */
+			case self::TYPE_ANNOUNCEMENT:
 				$this->source = $this->getString();
 			case self::TYPE_RAW:
 			case self::TYPE_TIP:
@@ -67,17 +69,14 @@ class TextPacket extends DataPacket {
 		}
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-		$this->reset();
+	public function encodePayload(){
 		$this->putByte($this->type);
 		switch($this->type){
 			case self::TYPE_POPUP:
 			case self::TYPE_CHAT:
-				/** @noinspection PhpMissingBreakStatementInspection */
 			case self::TYPE_WHISPER:
+			/** @noinspection PhpMissingBreakStatementInspection */
+			case self::TYPE_ANNOUNCEMENT:
 				$this->putString($this->source);
 			case self::TYPE_RAW:
 			case self::TYPE_TIP:
@@ -94,11 +93,8 @@ class TextPacket extends DataPacket {
 		}
 	}
 
-	/**
-	 * @return PacketName|string
-	 */
-	public function getName(){
-		return "TextPacket";
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleText($this);
 	}
 
 }

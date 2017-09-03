@@ -19,29 +19,30 @@
  *
 */
 
+declare(strict_types=1);
+
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-class RiderJumpPacket extends DataPacket {
+use pocketmine\network\mcpe\NetworkSession;
+
+class RiderJumpPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::RIDER_JUMP_PACKET;
 
-	public $unknown;
+	public $power;
 
-	/**
-	 *
-	 */
-	public function decode(){
-		$this->unknown = $this->getVarInt();
+	public function decodePayload(){
+		$this->power = $this->getVarInt();
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-		$this->reset();
-		$this->putVarInt($this->unknown);
+	public function encodePayload(){
+		$this->putVarInt($this->power);
+	}
+
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleRiderJump($this);
 	}
 }

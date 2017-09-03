@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,17 +15,20 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-class InteractPacket extends DataPacket {
+use pocketmine\network\mcpe\NetworkSession;
 
+class InteractPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::INTERACT_PACKET;
 
 	const ACTION_RIGHT_CLICK = 1;
@@ -33,32 +36,23 @@ class InteractPacket extends DataPacket {
 	const ACTION_LEAVE_VEHICLE = 3;
 	const ACTION_MOUSEOVER = 4;
 
+	const ACTION_OPEN_INVENTORY = 6;
+
 	public $action;
-	public $eid;
 	public $target;
 
-	/**
-	 *
-	 */
-	public function decode(){
+	public function decodePayload(){
 		$this->action = $this->getByte();
-		$this->target = $this->getEntityId();
+		$this->target = $this->getEntityRuntimeId();
 	}
 
-	/**
-	 *
-	 */
-	public function encode(){
-		$this->reset();
+	public function encodePayload(){
 		$this->putByte($this->action);
-		$this->putEntityId($this->target);
+		$this->putEntityRuntimeId($this->target);
 	}
 
-	/**
-	 * @return PacketName|string
-	 */
-	public function getName(){
-		return "InteractPacket";
+	public function handle(NetworkSession $session) : bool{
+		return $session->handleInteract($this);
 	}
 
 }
