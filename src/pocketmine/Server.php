@@ -282,7 +282,7 @@ class Server{
 	 * @return string
 	 */
 	public function getName() : string{
-		return "PocketMine-MP-DerivedVersion";
+		return "PocketMine-MP";
 	}
 
 	/**
@@ -309,8 +309,9 @@ class Server{
 	/**
 	 * @return string
 	 */
-	public function getVersion() : string{
-		return ProtocolInfo::MINECRAFT_VERSION;
+	public function getVersion(){
+		$version = implode(",",ProtocolInfo::MINECRAFT_VERSION);
+		return $version;
 	}
 
 	/**
