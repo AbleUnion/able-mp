@@ -173,6 +173,7 @@ use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\UUID;
+use pocketmine\utils\BinaryStream;
 
 
 /**
@@ -2006,14 +2007,20 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		if($this->loggedIn){
 			return false;
 		}
-
-		if($packet->protocol !== ProtocolInfo::CURRENT_PROTOCOL){
+		$this->getServer()->getLogger()->info($packet->protocol);
+		if(!in_array($packet->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
 			if($packet->protocol < ProtocolInfo::CURRENT_PROTOCOL){
 				$message = "disconnectionScreen.outdatedClient";
-				$this->sendPlayStatus(PlayStatusPacket::LOGIN_FAILED_CLIENT, true);
+
+				$pk = new PlayStatusPacket();
+				$pk->status = PlayStatusPacket::LOGIN_FAILED_CLIENT;
+				$this->directDataPacket($pk);
 			}else{
 				$message = "disconnectionScreen.outdatedServer";
-				$this->sendPlayStatus(PlayStatusPacket::LOGIN_FAILED_SERVER, true);
+
+				$pk = new PlayStatusPacket();
+				$pk->status = PlayStatusPacket::LOGIN_FAILED_SERVER;
+				$this->directDataPacket($pk);
 			}
 			$this->close("", $message, false);
 
@@ -3946,7 +3953,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function teleport(Vector3 $pos, float $yaw = null, float $pitch = null) : bool{
+	public function teleport(Vector3 $pos, $yaw = null, $pitch = null){
 		if(parent::teleport($pos, $yaw, $pitch)){
 
 			foreach($this->windowIndex as $window){
