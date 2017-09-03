@@ -1471,7 +1471,6 @@ class Server{
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
 			$this->console = new CommandReader();
-			$this->version = $version;
 			$code = $this->getCodename();
 			$mcpe = $this->getVersion();
 			$p = Info::CURRENT_PROTOCOL;
