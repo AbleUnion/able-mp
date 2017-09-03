@@ -1471,7 +1471,25 @@ class Server{
 			$this->console = new CommandReader();
 
 			$version = new VersionString($this->getPocketMineVersion());
-
+                        $this->logger->info("    
+§6______________________________________________________________________________		
+§6|		                                                             §6| 
+§6|§b                                  / |                                   §6|
+§6|§b                                  | |                           ____    §6| 
+§6|§b               __                 | |                         /  _ /    §6| 
+§6|§b              /  \        _____   | |          ______         | |       §6| 
+§6|§b             / /\ \      |  _  \  | |        /  / ___  |      | |       §6| 
+§6|§b            / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____   §6|     
+§6|§b           / ______ \    |_____|  |_________/_/_________/     |_______| §6|
+§6|§b          / /     \  \   |  _  \            | |_______        | |       §6|               
+§6|§b         / /       \  \  | |_| |             \_______/        | |       §6|
+§6|§b                         |_____/                              | |_      §6|    
+§6|§b                                                              \____\    §6|  
+§6|__________________________________________________________________________§6|               			 
+                                  MineCraft:PE Server  [ Able Union ]
+				  마인크래프트: PE 서버 [ ABLE 연합 ]
+				  제작자: [늦잠, 영준]
+				      ");
 			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
