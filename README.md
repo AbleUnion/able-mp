@@ -33,6 +33,8 @@
 * [ ] redstone
 * [ ] enchant
 * [X] boat
+* [ ] 지옥 월드
+* [ ] 엔더 월드
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
