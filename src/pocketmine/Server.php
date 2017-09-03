@@ -1473,12 +1473,11 @@ class Server{
 			$this->console = new CommandReader();
 			$code = $this->getCodename();
 			$mcpe = $this->getVersion();
-			$p = Info::CURRENT_PROTOCOL;
+			$p = Protocolinfo::CURRENT_PROTOCOL;
 			$api = $this->getApiVersion();
 			$ip = Utils::getIP();
 			$port = $this->getPort();
 			$query = $this->getIp();
-			$ssl = $this->isExtensionInstalled("OpenSSL");
 			$mode = $this->checkAuthentication();
 			$lang = $this->getProperty("settings.language", "eng");
 			$date = date("D, F d, Y, H:i T");
