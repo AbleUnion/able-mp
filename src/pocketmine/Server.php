@@ -1257,6 +1257,7 @@ class Server{
   
   		return $this->properties->exists($variable) ? (int) $this->properties->get($variable) : (int) $defaultValue;
 	}
+		}
 	/**
 	 * @param string $variable
 	 * @param int    $value
