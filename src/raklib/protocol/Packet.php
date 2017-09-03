@@ -41,8 +41,8 @@ abstract class Packet{
 		return $len === 1 ? $this->buffer{$this->offset++} : substr($this->buffer, ($this->offset += $len) - $len, $len);
 	}
 
-	protected function getLong(){
-		return Binary::readLong($this->get(8));
+	protected function getLong($signed = true){
+		return Binary::readLong($this->get(8), $signed);
 	}
 
 	protected function getInt(){
@@ -72,17 +72,10 @@ abstract class Packet{
 	protected function getAddress(&$addr, &$port, &$version = null){
 		$version = $this->getByte();
 		if($version === 4){
-			$addr = ((~$this->getByte()) & 0xff) . "." . ((~$this->getByte()) & 0xff) . "." . ((~$this->getByte()) & 0xff) . "." . ((~$this->getByte()) & 0xff);
+			$addr = ((~$this->getByte()) & 0xff) .".". ((~$this->getByte()) & 0xff) .".". ((~$this->getByte()) & 0xff) .".". ((~$this->getByte()) & 0xff);
 			$port = $this->getShort(false);
-		}elseif($version === 6){
-			//http://man7.org/linux/man-pages/man7/ipv6.7.html
-			Binary::readLShort($this->get(2)); //Family, AF_INET6
-			$port = $this->getShort(false);
-			$this->getInt(); //flow info
-			$addr = inet_ntop($this->get(16));
-			$this->getInt(); //scope ID
 		}else{
-			throw new \UnexpectedValueException("Unknown IP address version $version");
+			//TODO: IPv6
 		}
 	}
 
@@ -122,7 +115,7 @@ abstract class Packet{
 		$this->putShort(strlen($v));
 		$this->put($v);
 	}
-
+	
 	protected function putAddress($addr, $port, $version = 4){
 		$this->putByte($version);
 		if($version === 4){
@@ -130,14 +123,8 @@ abstract class Packet{
 				$this->putByte((~((int) $b)) & 0xff);
 			}
 			$this->putShort($port);
-		}elseif($version === 6){
-			$this->put(Binary::writeLShort(AF_INET6));
-			$this->putShort($port);
-			$this->putInt(0);
-			$this->put(inet_pton($addr));
-			$this->putInt(0);
 		}else{
-			throw new \InvalidArgumentException("IP version $version is not supported");
+			//IPv6
 		}
 	}
 
@@ -153,7 +140,6 @@ abstract class Packet{
 		$this->buffer = null;
 		$this->offset = 0;
 		$this->sendTime = null;
-
 		return $this;
 	}
 }
