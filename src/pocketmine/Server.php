@@ -1469,18 +1469,19 @@ class Server{
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
-			$this->console = new CommandReader();
+			$this->memoryManager = new MemoryManager($this);
+			$version = $this->getVersion();
 			$code = $this->getCodename();
 			$mcpe = $this->getVersion();
-			$p = Protocolinfo::CURRENT_PROTOCOL;
+			$p = ProtocolInfo::CURRENT_PROTOCOL;
 			$api = $this->getApiVersion();
 			$ip = Utils::getIP();
 			$port = $this->getPort();
 			$query = $this->getIp();
+			$ssl = $this->isExtensionInstalled("OpenSSL");
 			$mode = $this->checkAuthentication();
 			$lang = $this->getProperty("settings.language", "eng");
 			$date = date("D, F d, Y, H:i T");
-			$package = $packages;
                         $this->logger->info("    
 §6______________________________________________________________________________________________________		
 §6|		                                                               |        -ABLE-MP-      |
