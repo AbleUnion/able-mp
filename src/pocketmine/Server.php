@@ -1471,23 +1471,35 @@ class Server{
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
 			$this->console = new CommandReader();
-
-			$version = new VersionString($this->getPocketMineVersion());
+                        $version = $this->getFormattedVersion();
+			$this->version = $version;
+			$code = $this->getCodename();
+			$mcpe = $this->getVersion();
+			$p = Info::CURRENT_PROTOCOL;
+			$api = $this->getApiVersion();
+			$ip = Utils::getIP();
+			$port = $this->getPort();
+			$query = $this->getIp();
+			$ssl = $this->isExtensionInstalled("OpenSSL");
+			$mode = $this->checkAuthentication();
+			$lang = $this->getProperty("settings.language", "eng");
+			$date = date("D, F d, Y, H:i T");
+			$package = $packages;
                         $this->logger->info("    
-_______________________________________________________________________________			
-|			                                                       |
-|                                      / |                                     |
-|                                      | |                           ____      |
-|                   __                 | |                         /  _ /      |
-|                  /  \        _____   | |          ______         | |         | 
-|                 / /\ \      |  _  \  | |        /  / ___  |      | |         |                       
-|                / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____     |
-|               / ______ \    |_____|  |_________/_/_________/     |_______|   |
-|              / /     \  \   |  _  \            | |_______        | |         |
-|             / /       \  \  | |_| |             \_______/        | |         |
-|                             |_____/                              | |_        |
-|                                                                  \____\      |
-|______________________________________________________________________________|				 
+§6______________________________________________________________________________________________________		
+§6|		                                                               |        -ABLE-MP-      |
+§6|§b                                  / |                                     | §c날짜: date          |
+§6|§b                                  | |                           ____      | §c버전: §d$mcp        |
+§6|§b               __                 | |                         /  _ /      | §c프로토콜: §d$p      |
+§6|§b              /  \        _____   | |          ______         | |         | §cIP: §d$ip           |
+§6|§b             / /\ \      |  _  \  | |        /  / ___  |      | |         | §c포트: §d$port       |
+§6|§b            / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____     | §c쿼리: §d$query      |
+§6|§b           / ______ \    |_____|  |_________/_/_________/     |_______|   |_______________________|
+§6|§b          / /     \  \   |  _  \            | |_______        | |         |§6----------------------                       
+§6|§b         / /       \  \  | |_| |             \_______/        | |         | §cAPI Version: §d$api 
+§6|§b                         |_____/                              | |_        | §c언어: §d$lang       
+§6|§b                                                              \____\      | §cPackage: §d$package 
+§6|____________________________________________________________________________|§6---------------------	               			 
                                   MineCraft:PE Server  [ Able Union ]
 				  마인크래프트: PE 서버 [ ABLE 연합 ]
 				  제작자: [늦잠, 영준]
