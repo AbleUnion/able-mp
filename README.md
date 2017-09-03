@@ -7,10 +7,11 @@
 * [X] Mob AI
 * [X] Minecart
 * [X] Boat
+* [X] 날씨
 
 # 추가될것
 - 레드스톤
-
+- 인첸트 기능
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
 * __[PHP mbstring](http://php.net/manual/en/book.mbstring.php)__
