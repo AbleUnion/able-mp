@@ -1249,15 +1249,13 @@ class Server{
 	 * @return int
 	 */
 		public function getConfigInt(string $variable, int $defaultValue = 0) : int{
-		public function getConfigInt($variable, $defaultValue = 0){
   		$v = getopt("", ["$variable::"]);
   		if(isset($v[$variable])){
   			return (int) $v[$variable];
   		}
   
   		return $this->properties->exists($variable) ? (int) $this->properties->get($variable) : (int) $defaultValue;
-	}
-		}
+ 	}
 	/**
 	 * @param string $variable
 	 * @param int    $value
