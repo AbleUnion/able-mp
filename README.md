@@ -2,6 +2,15 @@
 
 # ABLE-MP for 1.1.5
 
+# 기능
+* [X] 멀티 프로토콜
+* [X] Mob AI
+* [X] Minecart
+* [X] Boat
+
+# 추가될것
+- 레드스톤
+
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
 * __[PHP mbstring](http://php.net/manual/en/book.mbstring.php)__
