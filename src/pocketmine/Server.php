@@ -1471,7 +1471,6 @@ class Server{
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
 			$this->console = new CommandReader();
-                        $version = $this->getFormattedVersion();
 			$this->version = $version;
 			$code = $this->getCodename();
 			$mcpe = $this->getVersion();
@@ -1489,7 +1488,7 @@ class Server{
 §6______________________________________________________________________________________________________		
 §6|		                                                               |        -ABLE-MP-      |
 §6|§b                                  / |                                     | §c날짜: date          |
-§6|§b                                  | |                           ____      | §c버전: §d$mcp        |
+§6|§b                                  | |                           ____      | §c버전: §d$mcpe       |
 §6|§b               __                 | |                         /  _ /      | §c프로토콜: §d$p      |
 §6|§b              /  \        _____   | |          ______         | |         | §cIP: §d$ip           |
 §6|§b             / /\ \      |  _  \  | |        /  / ___  |      | |         | §c포트: §d$port       |
