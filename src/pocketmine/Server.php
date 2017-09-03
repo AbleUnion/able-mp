@@ -1469,7 +1469,6 @@ class Server{
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
-			$this->memoryManager = new MemoryManager($this);
 			$version = $this->getVersion();
 			$code = $this->getCodename();
 			$mcpe = $this->getVersion();
