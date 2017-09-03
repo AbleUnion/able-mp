@@ -1473,13 +1473,17 @@ class Server{
 			$this->console = new CommandReader();
 
 			$version = new VersionString($this->getPocketMineVersion());
-                        $this->logger->info("       ㅡㅡㅡ\   ㅣ          ㅣㅡㅡㅡㅡㅡ
-			                     /\    ㅣ      l  ㅣ          ㅣ   
-                                            /  \   ㅣ      /  ㅣ          ㅣ
-                                           /----\  ㅣ------   ㅣ          ㅣㅡㅡㅡㅡㅡ
-                                          /      \ ㅣ      \  ㅣ          ㅣ
-					 /        \ㅣ       l ㅣㅡㅡㅡㅡㅡ ㅣ
-					            ㅡㅡㅡㅡ/             ㅣㅡㅡㅡㅡㅡㅡ
+                        $this->logger->info("         
+			              ㅣㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+			              ㅣ                ㅡㅡㅡ\               ㅡㅡㅡㅡㅡㅡ   ㅣ
+			              ㅣ        /\    ㅣ      l  ㅣ          ㅣ             ㅣ
+                                      ㅣ       /  \   ㅣ      /  ㅣ          ㅣ             ㅣ
+                                      ㅣ      /----\  ㅣ------   ㅣ          ㅣㅡㅡㅡㅡㅡ    ㅣ
+                                      ㅣ    /       \ ㅣ      \  ㅣ          ㅣ             ㅣ
+				      ㅣ	  /         \ㅣ       l ㅣㅡㅡㅡㅡㅡ ㅣ             ㅣ
+				      ㅣ	               ㅡㅡㅡㅡ/             ㅣㅡㅡㅡㅡㅡㅡ ㅣ
+				      ㅣㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ		  
+				      ")
 			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
