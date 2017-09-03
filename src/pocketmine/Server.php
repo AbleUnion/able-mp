@@ -1248,14 +1248,15 @@ class Server{
 	 *
 	 * @return int
 	 */
+		public function getConfigInt(string $variable, int $defaultValue = 0) : int{
 		public function getConfigInt($variable, $defaultValue = 0){
-		$v = getopt("", ["$variable::"]);
-		if(isset($v[$variable])){
-			return (int) $v[$variable];
-		}
-
-		return $this->properties->exists($variable) ? (int) $this->properties->get($variable) : (int) $defaultValue;
-            }
+  		$v = getopt("", ["$variable::"]);
+  		if(isset($v[$variable])){
+  			return (int) $v[$variable];
+  		}
+  
+  		return $this->properties->exists($variable) ? (int) $this->properties->get($variable) : (int) $defaultValue;
+	}
 	/**
 	 * @param string $variable
 	 * @param int    $value
@@ -1471,19 +1472,19 @@ class Server{
 			
                         $this->logger->info("    
 §6______________________________________________________________________________		
-§6|		                                                               | 
-§6|§b                                  / |                                     |
-§6|§b                                  | |                           ____      | 
-§6|§b               __                 | |                         /  _ /      | 
-§6|§b              /  \        _____   | |          ______         | |         | 
-§6|§b             / /\ \      |  _  \  | |        /  / ___  |      | |         | 
-§6|§b            / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____     |     
-§6|§b           / ______ \    |_____|  |_________/_/_________/     |_______|   |
-§6|§b          / /     \  \   |  _  \            | |_______        | |         |               
-§6|§b         / /       \  \  | |_| |             \_______/        | |         |
-§6|§b                         |_____/                              | |_        |    
-§6|§b                                                              \____\      |  
-§6|____________________________________________________________________________|               			 
+§6|		                                                             §6| 
+§6|§b                                  / |                                   §6|
+§6|§b                                  | |                           ____    §6| 
+§6|§b               __                 | |                         /  _ /    §6| 
+§6|§b              /  \        _____   | |          ______         | |       §6| 
+§6|§b             / /\ \      |  _  \  | |        /  / ___  |      | |       §6| 
+§6|§b            / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____   §6|     
+§6|§b           / ______ \    |_____|  |_________/_/_________/     |_______| §6|
+§6|§b          / /     \  \   |  _  \            | |_______        | |       §6|               
+§6|§b         / /       \  \  | |_| |             \_______/        | |       §6|
+§6|§b                         |_____/                              | |_      §6|    
+§6|§b                                                              \____\    §6|  
+§6|__________________________________________________________________________§6|               			 
                                   MineCraft:PE Server  [ Able Union ]
 				  마인크래프트: PE 서버 [ ABLE 연합 ]
 				  제작자: [늦잠, 영준]
