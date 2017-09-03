@@ -56,7 +56,7 @@ abstract class DataPacket extends Packet{
 			$data = substr($this->buffer, $this->offset);
 			$packet = EncapsulatedPacket::fromBinary($data, false, $offset);
 			$this->offset += $offset;
-			if($packet->buffer === ''){
+			if(strlen($packet->buffer) === 0){
 				break;
 			}
 			$this->packets[] = $packet;
@@ -66,7 +66,6 @@ abstract class DataPacket extends Packet{
 	public function clean(){
 		$this->packets = [];
 		$this->seqNumber = null;
-
 		return parent::clean();
 	}
 }
