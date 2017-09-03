@@ -1503,7 +1503,7 @@ class Server{
                                   MineCraft:PE Server  [ Able Union ]
 				  마인크래프트: PE 서버 [ ABLE 연합 ]
 				  제작자: [늦잠, 영준]
-				      ")
+				      ");
 			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
