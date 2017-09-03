@@ -6,7 +6,7 @@
 * [X] 멀티 프로토콜
 * [X] Mob AI
 * [X] Minecart
-* [X] Boat
+* [todo] Boat
 * [X] 날씨
 
 # 추가될것
