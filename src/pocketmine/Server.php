@@ -1469,32 +1469,25 @@ class Server{
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
-			$version = $this->getVersion();
-			$code = $this->getCodename();
-			$mcpe = $this->getVersion();
-			$p = ProtocolInfo::CURRENT_PROTOCOL;
 			$api = $this->getApiVersion();
 			$ip = Utils::getIP();
 			$port = $this->getPort();
-			$query = $this->getIp();
-			$ssl = $this->isExtensionInstalled("OpenSSL");
-			$mode = $this->checkAuthentication();
 			$lang = $this->getProperty("settings.language", "eng");
 			$date = date("D, F d, Y, H:i T");
                         $this->logger->info("    
 §6______________________________________________________________________________________________________		
 §6|		                                                               |        -ABLE-MP-      |
-§6|§b                                  / |                                     | §c날짜: date          |
-§6|§b                                  | |                           ____      | §c버전: §d$mcpe       |
-§6|§b               __                 | |                         /  _ /      | §c프로토콜: §d$p      |
+§6|§b                                  / |                                     | §c날짜: $date          |
+§6|§b                                  | |                           ____      | §c버전: §d1.0.1~1.0.5 |
+§6|§b               __                 | |                         /  _ /      |                       |
 §6|§b              /  \        _____   | |          ______         | |         | §cIP: §d$ip           |
 §6|§b             / /\ \      |  _  \  | |        /  / ___  |      | |         | §c포트: §d$port       |
-§6|§b            / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____     | §c쿼리: §d$query      |
+§6|§b            / /__\_\     |_|_|_|  |_________/_/__ _| /        | |____     |                       |
 §6|§b           / ______ \    |_____|  |_________/_/_________/     |_______|   |_______________________|
 §6|§b          / /     \  \   |  _  \            | |_______        | |         |§6----------------------                       
 §6|§b         / /       \  \  | |_| |             \_______/        | |         | §cAPI Version: §d$api 
 §6|§b                         |_____/                              | |_        | §c언어: §d$lang       
-§6|§b                                                              \____\      | §cPackage: §d$package 
+§6|§b                                                              \____\      |  
 §6|____________________________________________________________________________|§6---------------------	               			 
                                   MineCraft:PE Server  [ Able Union ]
 				  마인크래프트: PE 서버 [ ABLE 연합 ]
