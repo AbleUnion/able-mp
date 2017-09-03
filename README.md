@@ -32,7 +32,7 @@
 * [X] wethers
 * [ ] redstone
 * [ ] enchant
-* [ ] boat
+* [X] boat
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
