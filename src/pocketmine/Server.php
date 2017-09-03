@@ -277,7 +277,8 @@ class Server{
 	public $limitedCreative = true;
 	public $entityAIEnabled = true;
 	public $rideableEntity = true;
-
+        public $redstoneEnabled = false;
+	
 	/*
 	 * @return string
 	 */
@@ -1497,6 +1498,7 @@ class Server{
 				"LimitedCreative" => true,
 				"EntityAIEnabled" => true,
 				"RideableEntity" => true,
+				"redstoneEnabled" => false,
 			]);
 
 			$this->cleanEntity = $this->getProperty("CleanEntity", false);
@@ -1512,6 +1514,7 @@ class Server{
 			$this->limitedCreative = $this->getProperty("LimitedCreative", true);
 			$this->entityAIEnabled = $this->getProperty("EntityAIEnabled", true);
 			$this->rideableEntity = $this->getProperty("RideableEntity", true);
+			$this->redstoneEnabled = $this->getProperty("redstoneEnabled", false);
 
 			if($this->crashdump){
 				if(!file_exists($dataPath . "crashdumps/")){
