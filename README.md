@@ -9,7 +9,7 @@
 * [X] 날씨
 * [ ] 레드스톤
 * [ ] 인첸트 기능
-* [ ] 보트
+* [X] 보트
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
