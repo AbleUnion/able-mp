@@ -2,68 +2,45 @@
 
 /*
  *
- *  _____   _____   __   _   _   _____  __    __  _____
- * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
- * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
- * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
- * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
- * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author iTX Technologies
- * @link https://itxtech.org
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
- */
+ *
+*/
+
+declare(strict_types=1);
 
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
-use pocketmine\entity\Boat as BoatEntity;
 use pocketmine\level\Level;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\Tag;
+use pocketmine\Player;
+use pocketmine\entity\Boat as BoatEntity;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\ListTag;
-use pocketmine\Player;
 
-class Boat extends Item {
-	/**
-	 * Boat constructor.
-	 *
-	 * @param int $meta
-	 * @param int $count
-	 */
+class Boat extends Item{
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::BOAT, $meta, $count, "Boat");
 	}
-
-	/**
-	 * @return bool
-	 */
-	public function canBeActivated() : bool{
-		return true;
-	}
-
-	/**
-	 * @param Level  $level
-	 * @param Player $player
-	 * @param Block  $block
-	 * @param Block  $target
-	 * @param        $face
-	 * @param        $fx
-	 * @param        $fy
-	 * @param        $fz
-	 *
-	 * @return bool
-	 */
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		$realPos = $block->getSide($face);
-
 		$boat = new BoatEntity($player->getLevel(), new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $realPos->getX() + 0.5),
@@ -82,19 +59,16 @@ class Boat extends Item {
 			"WoodID" => new IntTag("WoodID", $this->getDamage())
 		]));
 		$boat->spawnToAll();
-
-		if($player->isSurvival()){
+		if($player->isSurvival()) {
 			$item = $player->getInventory()->getItemInHand();
 			$count = $item->getCount();
 			if(--$count <= 0){
 				$player->getInventory()->setItemInHand(Item::get(Item::AIR));
 				return true;
 			}
-
 			$item->setCount($count);
 			$player->getInventory()->setItemInHand($item);
 		}
-
 		return true;
 	}
 }

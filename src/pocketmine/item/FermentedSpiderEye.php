@@ -19,15 +19,11 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\item;
 
-class FermentedSpiderEye extends Item {
-	/**
-	 * FermentedSpiderEye constructor.
-	 *
-	 * @param int $meta
-	 * @param int $count
-	 */
+class FermentedSpiderEye extends Item{
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::FERMENTED_SPIDER_EYE, $meta, $count, "Fermented Spider Eye");
 	}

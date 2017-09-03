@@ -150,6 +150,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::registerBlock(new WoodenPressurePlate());
 			self::registerBlock(new RedstoneOre());
 			self::registerBlock(new GlowingRedstoneOre());
+			self::registerBlock(new RedstoneTorchUnlit());
 			self::registerBlock(new RedstoneTorch());
 			self::registerBlock(new StoneButton());
 			self::registerBlock(new SnowLayer());

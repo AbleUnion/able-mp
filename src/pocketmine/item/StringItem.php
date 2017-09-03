@@ -23,13 +23,10 @@ declare(strict_types=1);
 
 namespace pocketmine\item;
 
-
-class IronAxe extends Tool{
+class StringItem extends Item{
 	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::IRON_AXE, $meta, $count, "Iron Axe");
+		parent::__construct(self::STRING, $meta, $count, "String");
 	}
 
-	public function isAxe(){
-		return Tool::TIER_IRON;
-	}
 }
+

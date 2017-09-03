@@ -19,25 +19,18 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\item;
 
 use pocketmine\entity\Effect;
 
-class Fish extends Food {
-
-	//Wrong! All wrong! TODO: Fix
-
+class Fish extends Food{
 	const FISH_FISH = 0;
 	const FISH_SALMON = 1;
 	const FISH_CLOWNFISH = 2;
 	const FISH_PUFFERFISH = 3;
 
-	/**
-	 * Fish constructor.
-	 *
-	 * @param int $meta
-	 * @param int $count
-	 */
 	public function __construct($meta = 0, $count = 1){
 		$name = "Raw Fish";
 		if($this->meta === self::FISH_SALMON){
@@ -50,9 +43,6 @@ class Fish extends Food {
 		parent::__construct(self::RAW_FISH, $meta, $count, $name);
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getFoodRestore() : int{
 		if($this->meta === self::FISH_FISH){
 			return 2;
@@ -61,14 +51,11 @@ class Fish extends Food {
 		}elseif($this->meta === self::FISH_CLOWNFISH){
 			return 1;
 		}elseif($this->meta === self::FISH_PUFFERFISH){
-			return 1.2;
+			return 1;
 		}
 		return 0;
 	}
 
-	/**
-	 * @return float
-	 */
 	public function getSaturationRestore() : float{
 		if($this->meta === self::FISH_FISH){
 			return 0.4;
@@ -82,9 +69,6 @@ class Fish extends Food {
 		return 0;
 	}
 
-	/**
-	 * @return array
-	 */
 	public function getAdditionalEffects() : array{
 		return $this->meta === self::FISH_PUFFERFISH ? [
 			Effect::getEffect(Effect::HUNGER)->setDuration(300)->setAmplifier(2),

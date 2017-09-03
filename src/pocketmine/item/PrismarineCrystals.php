@@ -13,22 +13,18 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author Pocketmine Team
- * @link http://www.pocketmine.net
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\item;
 
 
-class PrismarineCrystals extends Item {
-	/**
-	 * PrismarineCrystals constructor.
-	 *
-	 * @param int $meta
-	 * @param int $count
-	 */
+class PrismarineCrystals extends Item{
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::PRISMARINE_CRYSTALS, $meta, $count, "Prismarine Crystals");
 	}

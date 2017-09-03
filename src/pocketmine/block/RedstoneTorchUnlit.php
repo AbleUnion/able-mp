@@ -21,15 +21,17 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\item;
+namespace pocketmine\block;
 
+class RedstoneTorchUnlit extends Torch{
 
-class IronAxe extends Tool{
-	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::IRON_AXE, $meta, $count, "Iron Axe");
+	protected $id = self::UNLIT_REDSTONE_TORCH;
+
+	public function getName(){
+		return "Unlit Redstone Torch";
 	}
 
-	public function isAxe(){
-		return Tool::TIER_IRON;
+	public function getLightLevel(){
+		return 0;
 	}
 }
