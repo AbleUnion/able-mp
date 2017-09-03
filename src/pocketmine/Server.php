@@ -1470,7 +1470,6 @@ class Server{
 
 			$this->console = new CommandReader();
 
-			$version = new VersionString($this->getPocketMineVersion());
                         $this->logger->info("    
 §6______________________________________________________________________________		
 §6|		                                                             §6| 
@@ -1490,6 +1489,7 @@ class Server{
 				  마인크래프트: PE 서버 [ ABLE 연합 ]
 				  제작자: [늦잠, 영준]
 				      ");
+			$this->logger->info("§b버전 V1.0.1, V1.0.2, V1.0.3, V1.0.4, V1.0.5");
 			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
