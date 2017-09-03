@@ -12,6 +12,9 @@
 * [X] 보트
 * [ ] 지옥 월드
 * [ ] 엔더 월드
+* [ ] 몹 스포너
+* [ ] 1.1.X 블럭들
+* [ ] 
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
