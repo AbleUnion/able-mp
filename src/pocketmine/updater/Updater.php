@@ -75,7 +75,7 @@ namespace pocketmine\updater{
 	}
 	if(file_get_contents("buildno.txt") !== file_get_contents("https://raw.githubusercontent.com/AbleUnion/able-mp/master/buildno.txt")) {
 		echo 'you need to update' . PHP_EOL;
-		mkdir(sys_get_temp_dir() . '/updater/');
+		@mkdir(sys_get_temp_dir() . '/updater/');
 		$temp = sys_get_temp_dir() . '/updater/';
 		echo $temp;
 		file_put_contents($temp . '/files.zip', file_get_contents('https://github.com/AbleUnion/able-mp/archive/master.zip'));
