@@ -1473,7 +1473,16 @@ class Server{
 			$this->console = new CommandReader();
 
 			$version = new VersionString($this->getPocketMineVersion());
-
+			
+			$this->logger->info(TextFormat::WHITE . "_____________________________________________");
+			$this->logger->info(TextFormat::WHITE . "|" . TextFormat::AQUA . "        _     _                             " . TextFormat::WHITE . "|");
+			$this->logger->info(TextFormat::WHITE . "|" . TextFormat::AQUA . "   __ _| |__ | | ___       _ __ ___  _ __   " . TextFormat::WHITE . "|");
+			$this->logger->info(TextFormat::WHITE . "|" . TextFormat::AQUA . "  / _` | '_ \| |/ _ \_____| '_ ` _ \| '_ \  " . TextFormat::WHITE . "|");
+			$this->logger->info(TextFormat::WHITE . "|" . TextFormat::AQUA . " | (_| | |_) | |  __/_____| | | | | | |_) | " . TextFormat::WHITE . "|");
+			$this->logger->info(TextFormat::WHITE . "|" . TextFormat::AQUA . "  \__,_|_.__/|_|\___|     |_| |_| |_| .__/  " . TextFormat::WHITE . "|");
+			$this->logger->info(TextFormat::WHITE . "|" . TextFormat::AQUA . "                                    |_|     " . TextFormat::WHITE . "|");
+			$this->logger->info(TextFormat::WHITE . "|____________________________________________|");
+			$this->logger->info(TextFormat::LIGHT_PURPLE . 'buildno:' . TextFormat::GREEN . (int)file_get_contents($this->dataPath . '/buildno.txt'));
 			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
