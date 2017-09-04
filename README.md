@@ -10,6 +10,7 @@
 * [ ] 레드스톤(90%)
 * [ ] 인첸트 기능
 * [X] 보트
+* 보트에서 내리면 보트가 원래자리로
 * [ ] 지옥 월드
 * [ ] 엔더 월드
 * [ ] 몹 스포너
@@ -38,7 +39,7 @@
 * [X] wethers
 * [ ] redstone
 * [ ] enchant
-* [X] boat
+* [ ] boat
 * [ ] hell world
 * [ ] ender world
 
