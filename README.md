@@ -7,9 +7,16 @@
 * [X] mob ai
 * [X] 마인카트
 * [X] 날씨
-* [ ] 레드스톤
+* [ ] 레드스톤(90%)
 * [ ] 인첸트 기능
-* [ ] 보트
+* [X] 보트
+* 보트에서 내리면 보트가 원래자리로
+* [ ] 지옥 월드
+* [ ] 엔더 월드
+* [ ] 몹 스포너
+* [ ] 1.1.X 블럭들
+* [X] 모든 플러그인 자동로드
+* [ ] 자동 업뎃
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
@@ -33,6 +40,8 @@
 * [ ] redstone
 * [ ] enchant
 * [ ] boat
+* [ ] hell world
+* [ ] ender world
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__

@@ -1,46 +1,37 @@
 <?php
-
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *  _____            _               _____
+ * / ____|          (_)             |  __ \
+ *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___
+ *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \
+ *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
+ * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/
+ *                         __/ |
+ *                        |___/
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
+ * @author GenisysPro
+ * @link https://github.com/GenisysPro/GenisysPro
  *
  *
 */
-
-declare(strict_types=1);
+/**
+ * Minecraft: PE multiplayer protocol implementation
+ */
 
 namespace pocketmine\network\mcpe\protocol;
-
-/**
- * Version numbers and packet IDs for the current Minecraft PE protocol
- */
-interface ProtocolInfo{
-
-	/**
-	 * NOTE TO DEVELOPERS
-	 * Do not waste your time or ours submitting pull requests changing game and/or protocol version numbers.
-	 * Pull requests changing game and/or protocol version numbers will be closed.
-	 *
-	 * This file is generated automatically, do not edit it manually.
-	 */
-
+interface ProtocolInfo {
 	/**
 	 * Actual Minecraft: PE protocol version
 	 */
+
 	const CURRENT_PROTOCOL = 113;
-	const ACCEPTED_PROTOCOLS = [0, 110, 111, 112, 113];
+	const ACCEPTED_PROTOCOLS = [110, 111, 112, 113];
 	const MINECRAFT_VERSION = ["v1.1.0", "v1.1.1", "v1.1.2", "v1.1.3", "v1.1.4", "v1.1.5"];
 	const MINECRAFT_VERSION_NETWORK = "1.1.5";
 
@@ -137,5 +128,4 @@ interface ProtocolInfo{
 	const STRUCTURE_BLOCK_UPDATE_PACKET = 0x5b;
 	const SHOW_STORE_OFFER_PACKET = 0x5c;
 	const PURCHASE_RECEIPT_PACKET = 0x5d;
-
 }
