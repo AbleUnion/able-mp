@@ -284,6 +284,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::registerBlock(new EnderChest());
 			self::registerBlock(new Hopper());
 			self::registerBlock(new Beacon());
+			self::registerBlock(new DragonEgg());
 
 			foreach(self::$list as $id => $block){
 				if($block === null){
