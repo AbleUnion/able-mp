@@ -24,6 +24,8 @@ use pocketmine\level\Position;
 use pocketmine\level\sound\GenericSound;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\Player;
+use pocketmine\level\particle\PortalParticle;
+use pocketmine\utils\Random;
 class DragonEgg extends Fallable {
 	protected $id = self::DRAGON_EGG;
 	const RAND_VERTICAL = [-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7];
@@ -73,6 +75,15 @@ class DragonEgg extends Fallable {
 	}
 	public function onActivate(Item $item, Player $player = null){
 		$safe = false;
+		$part = new PortalParticle($this->asPosition());
+		for($i = 0; $i < 2; ++$i){
+			$part->setComponents(
+					$this->asPosition()->x + (rand(0, 10)/10),
+					$this->asPosition()->y + (rand(0, 10)/10),
+					$this->asPosition()->z + (rand(0, 10)/10)
+					);
+			$this->asPosition()->getLevel()->addParticle($part);
+		}
 		while(!$safe){
 			$level = $this->getLevel();
 			$x = $this->getX() + self::RAND_HORIZONTAL[array_rand(self::RAND_HORIZONTAL)];
