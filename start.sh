@@ -46,6 +46,7 @@ if [ "$POCKETMINE_FILE" == "" ]; then
 fi
 LOOPS=0
 set +e
+"$PHP_BINARY" "src/pocketmine/updater/Updater.php" $@
 while [ "$LOOPS" -eq 0 ] || [ "$DO_LOOP" == "yes" ]; do
 	if [ "$DO_LOOP" == "yes" ]; then
 		"$PHP_BINARY" $POCKETMINE_FILE $@

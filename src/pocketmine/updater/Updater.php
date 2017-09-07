@@ -30,6 +30,7 @@ namespace pocketmine\updater{
 	}
 	function rmdir_ok($dir) {
 		     $dirs = dir($dir);
+		     $entry = NULL;
 		     while(false !== ($entry == $dirs->read())) {
 			         if(($entry != '.') && ($entry != '..')) {
 				             if(is_dir($dir.'/'.$entry)) {
@@ -75,13 +76,16 @@ namespace pocketmine\updater{
 	}
 	if(file_get_contents("buildno.txt") !== file_get_contents("https://raw.githubusercontent.com/AbleUnion/able-mp/master/buildno.txt")) {
 		echo 'you need to update' . PHP_EOL;
-		@mkdir(sys_get_temp_dir() . '/updater/');
 		$temp = sys_get_temp_dir() . '/updater/';
-		echo $temp;
+		if(is_dir($temp)) {
+			rmdir_ok($temp);
+		}
+		@mkdir($temp, 0777);
 		file_put_contents($temp . '/files.zip', file_get_contents('https://github.com/AbleUnion/able-mp/archive/master.zip'));
 		extractZip($temp, $temp . '/files.zip');
 		rmdir_ok('src');
 		fileCopy($temp . '/able-mp-master', './');
+		rmdir_ok($temp);
 	}
 }
 	 

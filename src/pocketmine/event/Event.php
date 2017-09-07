@@ -26,6 +26,7 @@ declare(strict_types=1);
  */
 namespace pocketmine\event;
 
+use pocketmine\Server;
 abstract class Event{
 
 	/**
@@ -85,6 +86,9 @@ abstract class Event{
 		}
 
 		return static::$handlerList;
+	}
+	public function call() {
+		Server::getInstance()->getPluginManager()->callEvent($this);
 	}
 
 }
