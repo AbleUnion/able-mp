@@ -65,7 +65,9 @@ class Bed extends Transparent{
 			$this->z + 1
 		);
 	}
-
+	public function getMaxBounce() : float{
+		return 2.5;
+	}
 	public function isHeadPart() : bool{
 		return ($this->meta & self::BITFLAG_HEAD) !== 0;
 	}
