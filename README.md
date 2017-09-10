@@ -1,6 +1,6 @@
 ﻿![ABLE-MP](https://github.com/AbleUnion/able-mp/blob/master/logo.jpg)</br>
 
-# ABLE-MP for 1.1.5
+# ABLE-MP for 1.1.5 [Korean / English]
 
 # 기능
 * [X] 멀티 프로토콜
