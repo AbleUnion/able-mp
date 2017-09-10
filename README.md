@@ -2,6 +2,9 @@
 
 # ABLE-MP for 1.1.5 [Korean / English]
 
+*NOTE: The master branch is the only officially-supported branch.
+All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks.*
+
 # 기능
 * [X] 멀티 프로토콜
 * [X] mob ai
@@ -38,11 +41,15 @@
 * [X] mob ai
 * [X] minecart
 * [X] wethers
-* [ ] redstone
+* [ ] redstone(90%)
 * [ ] enchant
-* [ ] boat
+* [X] boat
 * [ ] hell world
 * [ ] ender world
+* [ ] mov spawner
+* [ ] 1.1.X blocks
+* [ ] Plugins autoload
+* [ ] auto update
 * [ ] PHP7.2
 
 ## Third-party Libraries/Protocols Used
