@@ -48,7 +48,7 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 * [ ] ender world
 * [ ] mob spawner
 * [ ] 1.1.X blocks
-* [ ] Plugins autoload
+* [X] Plugins autoload
 * [ ] auto update
 * [ ] PHP7.2
 
