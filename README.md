@@ -1,6 +1,9 @@
 ﻿![ABLE-MP](https://github.com/AbleUnion/able-mp/blob/master/logo.jpg)</br>
 
-# ABLE-MP for 1.1.5
+# ABLE-MP for 1.1.5 [Korean / English]
+
+*NOTE: The master branch is the only officially-supported branch.
+All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks.*
 
 # 기능
 * [X] 멀티 프로토콜
@@ -39,15 +42,15 @@
 * [X] mob ai
 * [X] minecart
 * [X] wethers
-* [ ] redstone
+* [ ] redstone(90%)
 * [ ] enchant
-* [ ] boat
-* [ ] nether world
+* [X] boat
+* [ ] hell world
 * [ ] ender world
-* [ ] 몹 스포너
-* [ ] 1.1.X 블럭들
-* [X] 모든 플러그인 자동로드
-* [X] 자동 업뎃
+* [ ] mob spawner
+* [ ] 1.1.X blocks
+* [X] Plugins autoload
+* [ ] auto update
 * [ ] PHP7.2
 * [X] Bouncy blocks
 
