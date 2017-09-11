@@ -55,4 +55,7 @@ class SlimeBlock extends Solid {
 	public function getName() : string{
 		return "Slime Block";
 	}
+	public function getMaxBounce() : float{
+		return 60;
+	}
 }

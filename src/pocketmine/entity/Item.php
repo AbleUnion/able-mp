@@ -163,7 +163,11 @@ class Item extends Entity{
 
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
-
+	
+	public function fall(float $fallDistance) {
+		$this->bounce($fallDistance);
+	}
+	
 	public function saveNBT(){
 		parent::saveNBT();
 		$this->namedtag->Item = $this->item->nbtSerialize(-1, "Item");

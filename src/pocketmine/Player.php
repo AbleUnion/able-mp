@@ -458,6 +458,13 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$this->sendSettings();
 	}
 
+	public function usingElytra() : bool{
+		if ($this->getInventory()->getChestplate() instanceof Elytra) {
+			return true;
+		}
+		return false;
+	}
+	
 	public function getAllowFlight() : bool{
 		return $this->allowFlight;
 	}
@@ -1486,6 +1493,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		return [];
 	}
+	
 
 	protected function checkGroundState($movX, $movY, $movZ, $dx, $dy, $dz){
 		if(!$this->onGround or $movY != 0){
@@ -1619,7 +1627,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 				$ev = new PlayerIllegalMoveEvent($this, $newPos);
 				$ev->setCancelled($this->allowMovementCheats);
 
-				$this->server->getPluginManager()->callEvent($ev);
+				$ev->call();
 
 				if(!$ev->isCancelled()){
 					$revert = true;
@@ -1627,7 +1635,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 					$this->server->getLogger()->debug("Old position: " . $this->asVector3() . ", new position: " . $this->newPosition);
 				}
 			}
-
 			if($diff > 0){
 				$this->x = $newPos->x;
 				$this->y = $newPos->y;
@@ -1718,6 +1725,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	protected function updateMovement(){
 
 	}
+	
+	public function bounce(float $fallDistance){
+		//todo: airtick 추가
+	}
 
 	public function sendAttributes(bool $sendAll = false){
 		$entries = $sendAll ? $this->attributeMap->getAll() : $this->attributeMap->needSend();
@@ -1773,7 +1784,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 						}
 						$this->inAirTicks = 0;
 					}else{
-						if(!$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
+						if(!$this->usingElytra() and !$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
 							$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 							$diff = ($this->speed->y - $expectedVelocity) ** 2;
 

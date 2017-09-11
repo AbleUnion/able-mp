@@ -73,6 +73,8 @@ use pocketmine\network\mcpe\protocol\SetEntityLinkPacket;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\Server;
+use pocketmine\level\particle\DestroyBlockParticle;
+use pocketmine\level\particle\FlameParticle;
 
 abstract class Entity extends Location implements Metadatable{
 
@@ -1525,9 +1527,20 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param float $fallDistance
 	 */
 	public function fall(float $fallDistance){
-
+		
 	}
-
+	
+	/**
+	 * Called when a falling entity hits the bouncy blocks.
+	 *
+	 * @param float $fallDistance
+	 */
+	public function bounce(float $fallDistance){
+		if (($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() > 0) and  ($fallDistance > 0.2)) {
+			$this->motionY = 0.1 * (($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() < ($fallDistance * 0.7)) ? $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() : ($fallDistance * 0.7));
+			$this->move($this->motionX, $this->motionY, $this->motionZ);
+		}
+	}
 	public function handleLavaMovement(){ //TODO
 
 	}

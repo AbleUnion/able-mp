@@ -21,6 +21,7 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 * [X] 모든 플러그인 자동로드
 * [ ] 자동 업뎃
 * [ ] PHP7.2
+* [X] 슬라임블럭/침대 통통 튀게
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
@@ -51,6 +52,7 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 * [X] Plugins autoload
 * [ ] auto update
 * [ ] PHP7.2
+* [X] Bouncy blocks
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__

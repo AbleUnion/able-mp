@@ -86,6 +86,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		parent::__construct($level, $nbt);
 	}
 
+//	public function bounce(float $fallDistance) {
+//	}
+	
 	public function getSkinData(){
 		return $this->skin;
 	}

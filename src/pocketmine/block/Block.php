@@ -284,6 +284,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::registerBlock(new Hopper());
 			self::registerBlock(new Beacon());
 			self::registerBlock(new DragonEgg());
+			self::registerBlock(new SlimeBlock());
 
 			foreach(self::$list as $id => $block){
 				if($block === null){
@@ -858,5 +859,8 @@ class Block extends Position implements BlockIds, Metadatable{
 		if($this->getLevel() instanceof Level){
 			$this->getLevel()->getBlockMetadata()->removeMetadata($this, $metadataKey, $plugin);
 		}
+	}
+	public function getMaxBounce() : float{
+		return 0;
 	}
 }
