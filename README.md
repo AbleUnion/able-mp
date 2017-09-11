@@ -18,6 +18,7 @@
 * [X] 모든 플러그인 자동로드
 * [ ] 자동 업뎃
 * [ ] PHP7.2
+* [X] 슬라임블럭/침대 통통 튀게
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
@@ -41,9 +42,14 @@
 * [ ] redstone
 * [ ] enchant
 * [ ] boat
-* [ ] hell world
+* [ ] nether world
 * [ ] ender world
+* [ ] 몹 스포너
+* [ ] 1.1.X 블럭들
+* [X] 모든 플러그인 자동로드
+* [X] 자동 업뎃
 * [ ] PHP7.2
+* [X] Bouncy blocks
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__

@@ -48,6 +48,7 @@ use pocketmine\Player;
 use pocketmine\utils\Binary;
 use pocketmine\utils\BlockIterator;
 use pocketmine\level\particle\DestroyBlockParticle;
+use pocketmine\block\SlimeBlock;
 
 abstract class Living extends Entity implements Damageable{
 
@@ -363,10 +364,7 @@ abstract class Living extends Entity implements Damageable{
 				$damage = 0;
 			}
 		}
-		if ($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() > 0) {
-			$this->motionY = $this->y + ($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() < ($fallDistance / 2) ? $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() : ($fallDistance / 2));
-			$this->move($this->motionX, $this->motionY, $this->motionZ);
-		}
+		$this->bounce($fallDistance);
 		if($damage > 0){
 			$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_FALL, $damage);
 			$this->attack($ev->getFinalDamage(), $ev);
