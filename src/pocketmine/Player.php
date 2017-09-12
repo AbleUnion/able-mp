@@ -1622,7 +1622,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			$diffZ = $this->z - $newPos->z;
 
 			$diff = ($diffX ** 2 + $diffY ** 2 + $diffZ ** 2) / ($tickDiff ** 2);
-
+/*
 			if($this->isSurvival() and !$revert and $diff > 0.0625){
 				$ev = new PlayerIllegalMoveEvent($this, $newPos);
 				$ev->setCancelled($this->allowMovementCheats);
@@ -1635,6 +1635,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 					$this->server->getLogger()->debug("Old position: " . $this->asVector3() . ", new position: " . $this->newPosition);
 				}
 			}
+*/
 			if($diff > 0){
 				$this->x = $newPos->x;
 				$this->y = $newPos->y;
@@ -1870,13 +1871,13 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		foreach($this->server->getOnlinePlayers() as $p){
 			if($p !== $this and $p->iusername === $this->iusername){
-				if($p->kick("logged in from another location") === false){
+				if($this->kick("logged in from another location") === false){
 					$this->close($this->getLeaveMessage(), "Logged in from another location");
 
 					return;
 				}
 			}elseif($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())){
-				if($p->kick("logged in from another location") === false){
+				if($this->kick("logged in from another location") === false){
 					$this->close($this->getLeaveMessage(), "Logged in from another location");
 
 					return;
