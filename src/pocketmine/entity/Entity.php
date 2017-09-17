@@ -2140,7 +2140,11 @@ abstract class Entity extends Location implements Metadatable{
 			$this->despawnFrom($player);
 		}
 	}
-
+    
+	public function isClosed() : bool {
+	    return $this->closed;
+	}
+	
 	public function close(){
 		if(!$this->closed){
 			$this->server->getPluginManager()->callEvent(new EntityDespawnEvent($this));
