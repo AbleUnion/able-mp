@@ -8,6 +8,10 @@
 *NOTE: The master branch is the only officially-supported branch.
 All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks.*
 
+*공지: -djdisodo 제가 새로 구매한 컴퓨터의 램이 2기가라 불가피하게 32비트 윈도우를 설치하게 되었습니다 하지만 able-mp는 32비트 php를 지원하지 않았고 현제 개발을 하지 못하고 있습니다 누군가 32비트 지원이 가능하도록 수정해주시면 감사하겠습니다*
+
+*Alert: -djdisodo my computer has only 2GB of ram so i installed 32bit windows but, able-mp doesn't support 32 bit php and i can't develop on my computer... if you can make to work on 32bit please help us*
+
 # 기능
 * [X] 멀티 프로토콜
 * [X] mob ai
