@@ -32,7 +32,7 @@ class Binary{
 	const LITTLE_ENDIAN = 0x01;
 
 	public static function signByte(int $value) : int{
-		return $value << 56 >> 56;
+		return $value << ((PHP_INT_SIZE === 8) ? 56 : 24 ) >> ((PHP_INT_SIZE === 8) ? 56 : 24 );
 	}
 
 	public static function unsignByte(int $value) : int{
@@ -40,15 +40,14 @@ class Binary{
 	}
 
 	public static function signShort(int $value) : int{
-		return $value << 48 >> 48;
+		return $value << ((PHP_INT_SIZE === 8) ? 48 : 16 ) >> ((PHP_INT_SIZE === 8) ? 48 : 16 );
 	}
 
 	public function unsignShort(int $value) : int{
 		return $value & 0xffff;
 	}
-
 	public static function signInt(int $value) : int{
-		return $value << 32 >> 32;
+		return ((PHP_INT_SIZE === 8) ? ($value << 32 >> 32) : $value);
 	}
 
 	public static function unsignInt(int $value) : int{
@@ -402,8 +401,23 @@ class Binary{
 	 */
 	public static function readLong(string $x) : int{
 		self::checkLength($x, 8);
-		$int = unpack("N*", $x);
-		return ($int[1] << 32) | $int[2];
+		if(PHP_INT_SIZE === 8){
+			$int = unpack("N*", $x);
+
+			return ($int[1] << 32) | $int[2];
+		}else{
+			$value = "0";
+			for($i = 0; $i < 8; $i += 2){
+				$value = bcmul($value, "65536", 0);
+				$value = bcadd($value, (string)self::readShort(substr($x, $i, 2)), 0);
+			}
+
+			if(bccomp($value, "9223372036854775807") == 1){
+				$value = bcadd($value, "-18446744073709551616");
+			}
+
+			return (int)$value;
+		}
 	}
 
 	/**
@@ -413,7 +427,22 @@ class Binary{
 	 * @return string
 	 */
 	public static function writeLong(int $value) : string{
-		return pack("NN", $value >> 32, $value & 0xFFFFFFFF);
+		if(PHP_INT_SIZE === 8){
+			return pack("NN", $value >> 32, $value & 0xFFFFFFFF);
+		}else{
+			$x = "";
+            $value = (string)$value;
+			if(bccomp($value, "0") == -1){
+				$value = bcadd($value, "18446744073709551616");
+			}
+
+			$x .= self::writeShort((int)bcmod(bcdiv($value, "281474976710656"), "65536"));
+			$x .= self::writeShort((int)bcmod(bcdiv($value, "4294967296"), "65536"));
+			$x .= self::writeShort((int)bcmod(bcdiv($value, "65536"), "65536"));
+			$x .= self::writeShort((int)bcmod($value, "65536"));
+
+			return $x;
+		}
 	}
 
 	/**
@@ -446,9 +475,11 @@ class Binary{
 	 * @return int
 	 */
 	public static function readVarInt(string $buffer, int &$offset) : int{
-		$raw = self::readUnsignedVarInt($buffer, $offset);
-		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 63));
+		$shift = PHP_INT_SIZE === 8 ? 63 : 31;
+		$raw = self::readUnsignedVarInt($buffer,$offset);
+		$temp = ((($raw << $shift) >> $shift) ^ $raw) >> 1;
+
+		return $temp ^ ($raw & (1 << $shift));
 	}
 
 	/**
@@ -484,8 +515,7 @@ class Binary{
 	 * @return string
 	 */
 	public static function writeVarInt(int $v) : string{
-		$v = ($v << 32 >> 32);
-		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> 31));
+		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> (PHP_INT_SIZE === 8 ? 63 : 31)));
 	}
 
 	/**
@@ -573,12 +603,11 @@ class Binary{
 				$buf .= chr($value | 0x80); //Let chr() take the last byte of this, it's faster than adding another & 0x7f.
 			}else{
 				$buf .= chr($value & 0x7f);
+
 				return $buf;
 			}
-
 			$value = (($value >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
 		}
-
-		throw new \InvalidArgumentException("Value too large to be encoded as a VarLong");
+		throw new \InvalidArgumentException("Value too large to be encoded as a varint");
 	}
 }
