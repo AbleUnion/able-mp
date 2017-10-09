@@ -285,8 +285,6 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::registerBlock(new Beacon());
 			self::registerBlock(new DragonEgg());
 			self::registerBlock(new SlimeBlock());
-			self::registerBlock(new AcaciaDoor());
-			self::registerBlock(new AcaciaWoodStairs());
 			foreach(self::$list as $id => $block){
 				if($block === null){
 					self::registerBlock(new UnknownBlock($id));
