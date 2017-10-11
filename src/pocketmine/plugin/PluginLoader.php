@@ -35,7 +35,7 @@ interface PluginLoader{
 	 *
 	 * @return Plugin|null
 	 */
-	public function loadPlugin(string $file);
+	public function loadPlugin($file);
 
 	/**
 	 * Gets the PluginDescription from the file
