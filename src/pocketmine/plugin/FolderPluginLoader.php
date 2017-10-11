@@ -100,7 +100,7 @@ class FolderPluginLoader implements PluginLoader{
 	 *
 	 * @return array
 	 */
-	public function getPluginFilters() : string{
+	public function getPluginFilters(){
 		return "/[^\\.]/";
 	}
 

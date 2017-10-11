@@ -120,7 +120,7 @@ class ScriptPluginLoader implements PluginLoader{
 	 *
 	 * @return string
 	 */
-	public function getPluginFilters() : string{
+	public function getPluginFilters(){
 		return "/\\.php$/i";
 	}
 

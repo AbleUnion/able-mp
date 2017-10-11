@@ -97,7 +97,7 @@ class PharPluginLoader implements PluginLoader{
 	 *
 	 * @return string
 	 */
-	public function getPluginFilters() : string{
+	public function getPluginFilters(){
 		return "/\\.phar$/i";
 	}
 

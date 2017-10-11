@@ -51,7 +51,7 @@ interface PluginLoader{
 	 *
 	 * @return string
 	 */
-	public function getPluginFilters() : string;
+	public function getPluginFilters();
 
 	/**
 	 * @param Plugin $plugin
