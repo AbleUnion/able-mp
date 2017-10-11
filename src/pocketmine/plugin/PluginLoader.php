@@ -44,7 +44,7 @@ interface PluginLoader{
 	 *
 	 * @return null|PluginDescription
 	 */
-	public function getPluginDescription(string $file);
+	public function getPluginDescription($file);
 
 	/**
 	 * Returns the filename regex patterns that this loader accepts
