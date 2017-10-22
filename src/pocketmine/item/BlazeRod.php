@@ -23,17 +23,14 @@ declare(strict_types=1);
 
 namespace pocketmine\item;
 
+class BlazeRod extends Item{
 
-class DiamondSword extends Tool{
 	public function __construct(int $meta = 0){
-		parent::__construct(self::DIAMOND_SWORD, $meta, "Diamond Sword");
+		parent::__construct(self::BLAZE_ROD, $meta, "Blaze Rod");
 	}
 
-	public function isSword(){
-		return Tool::TIER_DIAMOND;
+	public function getFuelTime() : int{
+		return 2400;
 	}
 
-	public function getAttackPoints() : int{
-		return 8;
-	}
 }
