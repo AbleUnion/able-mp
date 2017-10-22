@@ -37,7 +37,7 @@ class Rail extends Flowable{
 	const CURVED_SOUTH_EAST = 9;
 	const CURVED_NORTH_EAST = 8;
 
-/*
+	/*
 	const STRAIGHT_NORTH_SOUTH = 0;
 	const STRAIGHT_EAST_WEST = 1;
 	const ASCENDING_EAST = 2;
@@ -47,7 +47,9 @@ class Rail extends Flowable{
 	const CURVE_SOUTHEAST = 6;
 	const CURVE_SOUTHWEST = 7;
 	const CURVE_NORTHWEST = 8;
-	const CURVE_NORTHEAST = 9;*/
+	const CURVE_NORTHEAST = 9;
+	*/
+
 	protected $id = self::RAIL;
 	/** @var Vector3 [] */
 	protected $connected = [];
@@ -56,11 +58,11 @@ class Rail extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Rail";
 	}
 
-	protected function update(){
+	protected function update() : bool{
 		return true;
 	}
 
@@ -124,7 +126,7 @@ class Rail extends Flowable{
 		return true;
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, int $face, Vector3 $facePos, Player $player = null) : bool{
 		$downBlock = $this->getSide(Vector3::SIDE_DOWN);
 
 		if($downBlock instanceof Rail or !$this->isBlock($downBlock)){
@@ -222,19 +224,19 @@ class Rail extends Flowable{
 		return $connected;
 	}
 
-	public function getHardness() {
+	public function getHardness() :float{
 		return 0.7;
 	}
 
-	public function getResistance(){
+	public function getResistance() : float{
 		return 3.5;
 	}
 
-	public function canPassThrough(){
+	public function canPassThrough() : bool{
 		return true;
 	}
 
-	public function isRailBlock(){
+	public function isRailBlock() : bool{
 		return true;
 	}
 }
