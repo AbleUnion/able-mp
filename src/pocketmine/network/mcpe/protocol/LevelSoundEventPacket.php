@@ -215,15 +215,7 @@ class LevelSoundEventPacket extends DataPacket{
 		$this->disableRelativeVolume = $this->getBool();
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	public function encodePayload(){
-=======
 	protected function encodePayload(){
->>>>>>> refs/heads/master
-=======
-	protected function encodePayload(){
->>>>>>> refs/heads/master
 		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putByte($this->sound);
 		$this->putVector3Obj($this->position);

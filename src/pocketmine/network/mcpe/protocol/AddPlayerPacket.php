@@ -94,15 +94,7 @@ class AddPlayerPacket extends DataPacket{
 		}
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	public function encodePayload(){
-=======
 	protected function encodePayload(){
->>>>>>> refs/heads/master
-=======
-	protected function encodePayload(){
->>>>>>> refs/heads/master
 		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putUUID($this->uuid);
 		$this->putString($this->username);
