@@ -231,5 +231,7 @@ class Bed extends Transparent{
 
 		return [];
 	}
-
+	public function getMaxBounce() : float{
+		return 2.5;
+	}
 }

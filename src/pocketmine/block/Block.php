@@ -596,4 +596,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			$this->getLevel()->getBlockMetadata()->removeMetadata($this, $metadataKey, $owningPlugin);
 		}
 	}
+	public function getMaxBounce() : float{
+		return 0;
++	}
 }
