@@ -78,8 +78,8 @@ use pocketmine\inventory\BigCraftingGrid;
 use pocketmine\inventory\CraftingGrid;
 use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\Inventory;
-use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\PlayerCursorInventory;
+use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\inventory\transaction\action\InventoryAction;
@@ -167,7 +167,6 @@ use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\UUID;
-use pocketmine\utils\BinaryStream;
 
 
 /**
@@ -225,7 +224,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	protected $windows;
 	/** @var Inventory[] */
 	protected $windowIndex = [];
-	
+
 	/** @var bool[] */
 	protected $permanentWindows = [];
 
@@ -242,10 +241,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 	/** @var PlayerCursorInventory */
 	protected $cursorInventory;
-	
+
 	/** @var CraftingGrid */
 	protected $craftingGrid = null;
-	
+
 	public $creationTime = 0;
 
 	protected $randomClientId;
@@ -460,13 +459,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$this->sendSettings();
 	}
 
-	public function usingElytra() : bool{
-		if ($this->getInventory()->getChestplate() instanceof Elytra) {
-			return true;
-		}
-		return false;
-	}
-	
 	public function getAllowFlight() : bool{
 		return $this->allowFlight;
 	}
@@ -873,7 +865,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	public function getItemUseDuration() : int{
 		return $this->startAction === -1 ? -1 : ($this->server->getTick() - $this->startAction);
 	}
-	
+
 	protected function switchLevel(Level $targetLevel) : bool{
 		$oldLevel = $this->level;
 		if(parent::switchLevel($targetLevel)){
@@ -1150,7 +1142,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			$timings->stopTiming();
 			return false;
 		}
-
+		
 		$this->batchedPackets[] = clone $packet;
 		$timings->stopTiming();
 		return true;
@@ -1165,6 +1157,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	public function dataPacket(DataPacket $packet, bool $needACK = false){
 		return $this->sendDataPacket($packet, $needACK, false);
 	}
+
 	/**
 	 * @param DataPacket $packet
 	 * @param bool       $needACK
@@ -1417,7 +1410,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	 */
 	public function sendSettings(){
 		$pk = new AdventureSettingsPacket();
-		
+
 		$pk->setFlag(AdventureSettingsPacket::WORLD_IMMUTABLE, $this->isSpectator());
 		$pk->setFlag(AdventureSettingsPacket::NO_PVP, $this->isSpectator());
 		$pk->setFlag(AdventureSettingsPacket::AUTO_JUMP, $this->autoJump);
@@ -1428,7 +1421,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$pk->commandPermission = ($this->isOp() ? AdventureSettingsPacket::PERMISSION_OPERATOR : AdventureSettingsPacket::PERMISSION_NORMAL);
 		$pk->playerPermission = ($this->isOp() ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER);
 		$pk->entityUniqueId = $this->getId();
-		
+
 		$this->dataPacket($pk);
 	}
 
@@ -1498,7 +1491,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		return [];
 	}
-	
 
 	protected function checkGroundState(float $movX, float $movY, float $movZ, float $dx, float $dy, float $dz){
 		if(!$this->onGround or $movY != 0){
@@ -1521,7 +1513,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		}
 	}
 
-	protected function checkNearEntities($tickDiff){
+	protected function checkNearEntities(int $tickDiff){
 		foreach($this->level->getNearbyEntities($this->boundingBox->grow(1, 0.5, 1), $this) as $entity){
 			$entity->scheduleUpdate();
 
@@ -1583,7 +1575,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		}
 	}
 
-	protected function processMovement($tickDiff){
+	protected function processMovement(int $tickDiff){
 		if(!$this->isAlive() or !$this->spawned or $this->newPosition === null or $this->isSleeping()){
 			return;
 		}
@@ -1627,11 +1619,12 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			$diffZ = $this->z - $newPos->z;
 
 			$diff = ($diffX ** 2 + $diffY ** 2 + $diffZ ** 2) / ($tickDiff ** 2);
+
 			if($this->isSurvival() and !$revert and $diff > 0.0625){
 				$ev = new PlayerIllegalMoveEvent($this, $newPos);
 				$ev->setCancelled($this->allowMovementCheats);
 
-				$ev->call();
+				$this->server->getPluginManager()->callEvent($ev);
 
 				if(!$ev->isCancelled()){
 					$revert = true;
@@ -1639,6 +1632,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 					$this->server->getLogger()->debug("Old position: " . $this->asVector3() . ", new position: " . $this->newPosition);
 				}
 			}
+
 			if($diff > 0){
 				$this->x = $newPos->x;
 				$this->y = $newPos->y;
@@ -1729,7 +1723,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	protected function updateMovement(){
 
 	}
-	
+
 	protected function tryChangeMovement(){
 
 	}
@@ -1789,7 +1783,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 						}
 						$this->inAirTicks = 0;
 					}else{
-						if(!$this->usingElytra() and !$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
+						if(!$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
 							$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 							$diff = ($this->speed->y - $expectedVelocity) ** 2;
 
@@ -1876,7 +1870,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		parent::initEntity();
 		$this->addDefaultWindows();
 	}
-	
+
 	protected function processLogin(){
 		if(!$this->server->isWhitelisted($this->iusername)){
 			$this->close($this->getLeaveMessage(), "Server is white-listed");
@@ -1890,13 +1884,13 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		foreach($this->server->getLoggedInPlayers() as $p){
 			if($p !== $this and $p->iusername === $this->iusername){
-				if($this->kick("logged in from another location") === false){
+				if($p->kick("logged in from another location") === false){
 					$this->close($this->getLeaveMessage(), "Logged in from another location");
 
 					return;
 				}
 			}elseif($p->loggedIn and $this->getUniqueId()->equals($p->getUniqueId())){
-				if($this->kick("logged in from another location") === false){
+				if($p->kick("logged in from another location") === false){
 					$this->close($this->getLeaveMessage(), "Logged in from another location");
 
 					return;
@@ -2024,7 +2018,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$this->sendCommandData();
 
 		$this->inventory->sendCreativeContents();
-		
+
 		$this->level->getWeather()->sendWeather($this);
 
 		$this->server->addOnlinePlayer($this);
@@ -2035,20 +2029,14 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		if($this->loggedIn){
 			return false;
 		}
-		$this->getServer()->getLogger()->info($packet->protocol);
-		if(!in_array($packet->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
+
+		if($packet->protocol !== ProtocolInfo::CURRENT_PROTOCOL){
 			if($packet->protocol < ProtocolInfo::CURRENT_PROTOCOL){
 				$message = "disconnectionScreen.outdatedClient";
-
-				$pk = new PlayStatusPacket();
-				$pk->status = PlayStatusPacket::LOGIN_FAILED_CLIENT;
-				$this->directDataPacket($pk);
+				$this->sendPlayStatus(PlayStatusPacket::LOGIN_FAILED_CLIENT, true);
 			}else{
 				$message = "disconnectionScreen.outdatedServer";
-
-				$pk = new PlayStatusPacket();
-				$pk->status = PlayStatusPacket::LOGIN_FAILED_SERVER;
-				$this->directDataPacket($pk);
+				$this->sendPlayStatus(PlayStatusPacket::LOGIN_FAILED_SERVER, true);
 			}
 			$this->close("", $message, false);
 
@@ -2179,7 +2167,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 					break;
 				}
 
-					if(strpos($ev->getMessage(), "/") === 0){
+				if(strpos($ev->getMessage(), "/") === 0){
 					Timings::$playerCommandTimer->startTiming();
 					$this->server->dispatchCommand($ev->getPlayer(), substr($ev->getMessage(), 1));
 					Timings::$playerCommandTimer->stopTiming();
@@ -2225,7 +2213,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			if($this->server->rideableEntity){
 				$entity = $this->linkedEntity;
 				if($entity instanceof Boat){
-					$entity->goStraight($packet->x,$packet->y,$packet->z);
+					$entity->goStraight($packet->position->x,$packet->position->y,$packet->position->z);
 				}else{
 					$entity->setRotation($this->yaw,$this->pitch);
 				}
@@ -2264,7 +2252,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			}
 		}
 	}
-	
+
 	/**
 	 * Don't expect much from this handler. Most of it is roughly hacked and duct-taped together.
 	 *
@@ -2276,7 +2264,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			$this->sendAllInventories();
 			return true;
 		}
-		
+
 		/** @var InventoryAction[] $actions */
 		$actions = [];
 		foreach($packet->actions as $networkInventoryAction){
@@ -2288,9 +2276,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 				return false;
 			}
 
-				$actions[] = $action;
+			$actions[] = $action;
 		}
-		
+
 		switch($packet->transactionType){
 			case InventoryTransactionPacket::TYPE_NORMAL:
 				$transaction = new InventoryTransaction($this, $actions);
@@ -2316,6 +2304,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 				if(count($packet->actions) > 0){
 					$this->server->getLogger()->debug("Expected 0 actions for mismatch, got " . count($packet->actions) . ", " . json_encode($packet->actions));
 				}
+				$this->sendAllInventories();
 
 				return true;
 			case InventoryTransactionPacket::TYPE_USE_ITEM:
@@ -2350,12 +2339,12 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 						$this->inventory->sendHeldItem($this);
 
-					if($blockVector->distanceSquared($this) > 10000){
+						if($blockVector->distanceSquared($this) > 10000){
 							return true;
 						}
 						$target = $this->level->getBlock($blockVector);
 						$block = $target->getSide($face);
-						
+
 						$this->level->sendBlocks([$this], [$target, $block], UpdateBlockPacket::FLAG_ALL_PRIORITY);
 
 						return true;
@@ -2363,7 +2352,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 						if($this->spawned === false or !$this->isAlive()){
 							return true;
 						}
-						
+
 						$this->resetCraftingGridType();
 
 						$item = $this->inventory->getItemInHand();
@@ -2384,6 +2373,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 						$this->inventory->sendContents($this);
 						$target = $this->level->getBlock($blockVector);
 						$tile = $this->level->getTile($blockVector);
+
 						$this->level->sendBlocks([$this], [$target], UpdateBlockPacket::FLAG_ALL_PRIORITY);
 
 						$this->inventory->sendHeldItem($this);
@@ -2395,6 +2385,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 						return true;
 					case InventoryTransactionPacket::USE_ITEM_ACTION_CLICK_AIR:
 						$directionVector = $this->getDirectionVector();
+
 						if($this->isCreative()){
 							$item = $this->inventory->getItemInHand();
 						}elseif(!$this->inventory->getItemInHand()->equals($packet->trData->itemInHand)){
@@ -2620,7 +2611,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			case InteractPacket::ACTION_LEAVE_VEHICLE:
 				$this->isLinked = false;
 				$this->setUnLink($target);
-				unset($this->linkedEntity);
+				$this->linkedEntity = null;
 				break;
 			default:
 				$this->server->getLogger()->debug("Unhandled/unknown interaction type " . $packet->action . "received from " . $this->getName());
@@ -3123,6 +3114,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 						$this->moveForward++;
 					}else{
 						$this->linkedEntity->goStraight($this);
+
 					}
 				}elseif($packet->motionX == 0 and $packet->motionY == -1){
 					$this->linkedEntity->goBack($this);
@@ -3300,6 +3292,14 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		}
 		$this->sendTitleText($title, SetTitlePacket::TYPE_SET_TITLE);
 	}
+	
+	public function sendTitle(string $title, string $subtitle = "", int $fadeIn = 20, int $stay = 5, int $fadeOut = 20){
+		$this->setTitleDuration($fadeIn, $stay, $fadeOut);
+		if($subtitle !== ""){
+			$this->sendSubTitle($subtitle);
+		}
+		$this->sendTitleText($title, SetTitlePacket::TYPE_SET_TITLE);
+	}
 
 	/**
 	 * Sets the subtitle message, without sending a title.
@@ -3307,6 +3307,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	 * @param string $subtitle
 	 */
 	public function addSubTitle(string $subtitle){
+		$this->sendTitleText($subtitle, SetTitlePacket::TYPE_SET_SUBTITLE);
+	}
+
+	public function sendSubTitle(string $subtitle){
 		$this->sendTitleText($subtitle, SetTitlePacket::TYPE_SET_SUBTITLE);
 	}
 
