@@ -2436,7 +2436,14 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 				switch($type){
 					case InventoryTransactionPacket::USE_ITEM_ON_ENTITY_ACTION_INTERACT:
-						break; //TODO
+						if($this->server->rideableEntity){
+							if($target instanceof Rideable){
+								$this->isLinked = true;
+								$this->setLink($target);
+								$this->linkedEntity = $target;
+							}
+						}
+						break;
 					case InventoryTransactionPacket::USE_ITEM_ON_ENTITY_ACTION_ATTACK:
 						$cancelled = false;
 						if($target instanceof Player and $this->server->getConfigBoolean("pvp", true) === false){
@@ -2609,13 +2616,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		switch($packet->action){
 			case InteractPacket::ACTION_MOUSEOVER:
-				if($this->server->rideableEntity){
-					if($target instanceof Rideable){
-						$this->isLinked = true;
-						$this->setLink($target);
-						$this->linkedEntity = $target;
-					}
-				}
 				break;
 			case InteractPacket::ACTION_LEAVE_VEHICLE:
 				$this->isLinked = false;
