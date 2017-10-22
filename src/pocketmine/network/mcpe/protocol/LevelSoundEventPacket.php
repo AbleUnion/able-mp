@@ -216,7 +216,11 @@ class LevelSoundEventPacket extends DataPacket{
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public function encodePayload(){
+=======
+	protected function encodePayload(){
+>>>>>>> refs/heads/master
 =======
 	protected function encodePayload(){
 >>>>>>> refs/heads/master
