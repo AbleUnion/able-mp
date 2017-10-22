@@ -23,35 +23,19 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-use pocketmine\item\Tool;
+class NetherWartBlock extends Solid{
 
-class Lapis extends Solid{
-
-	protected $id = self::LAPIS_BLOCK;
+	protected $id = Block::NETHER_WART_BLOCK;
 
 	public function __construct(int $meta = 0){
 		$this->meta = $meta;
 	}
 
 	public function getName() : string{
-		return "Lapis Lazuli Block";
-	}
-
-	public function getToolType() : int{
-		return Tool::TYPE_PICKAXE;
+		return "Nether Wart Block";
 	}
 
 	public function getHardness() : float{
-		return 3;
+		return 1;
 	}
-
-	public function getDrops(Item $item) : array{
-		if($item->isPickaxe() >= Tool::TIER_STONE){
-			return parent::getDrops($item);
-		}
-
-		return [];
-	}
-
 }
