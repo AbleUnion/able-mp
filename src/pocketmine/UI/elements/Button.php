@@ -1,6 +1,6 @@
 <?php
 
-namespace xenialdan\customui\elements;
+namespace pocketmine\UI\elements;
 
 use Exception;
 use pocketmine\Player;

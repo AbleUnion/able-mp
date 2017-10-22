@@ -19,7 +19,7 @@
  *
 */
 
-namespace xenialdan\customui\event;
+namespace pocketmine\event\UI;
 
 
 use pocketmine\network\mcpe\protocol\DataPacket;

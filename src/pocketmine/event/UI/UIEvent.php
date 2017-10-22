@@ -1,12 +1,12 @@
 <?php
 
-namespace xenialdan\customui\event;
+namespace pocketmine\event\UI;
 
 use pocketmine\event\plugin\PluginEvent;
 use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
-use xenialdan\customui\network\ModalFormResponsePacket;
+use pocketmine\network\mcpe\protocol\ModalFormResponsePacket;
 
 abstract class UIEvent extends PluginEvent{
 

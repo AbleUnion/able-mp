@@ -1,10 +1,10 @@
 <?php
 
-namespace xenialdan\customui;
+namespace pocketmine\UI;
 
 use pocketmine\Player;
-use xenialdan\customui\elements\Button;
-use xenialdan\customui\elements\UIElement;
+use pocketmine\UI\elements\Button;
+use pocketmine\UI\elements\UIElement;
 
 interface CustomUI{
 

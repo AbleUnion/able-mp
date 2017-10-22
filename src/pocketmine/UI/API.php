@@ -1,12 +1,12 @@
 <?php
 
-namespace xenialdan\customui;
+namespace pocketmine\UI;
 
 use pocketmine\OfflinePlayer;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\Utils;
-use xenialdan\customui\network\ModalFormRequestPacket;
+use pocketmine\network\mcpe\protocol\ModalFormRequestPacket;
 
 class API{
 	/** @var array(CustomUI[]) */
