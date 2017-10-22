@@ -1376,11 +1376,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		if($this->isSpectator()){
 			$this->flying = true;
 			$this->despawnFromAll();
-
-			// Client automatically turns off flight controls when on the ground.
-			// A combination of this hack and a new AdventureSettings flag FINALLY
-			// fixes spectator flight controls. Thank @robske110 for this hack.
-			$this->teleport($this->temporalVector->setComponents($this->x, $this->y + 0.1, $this->z));
 		}else{
 			if($this->isSurvival()){
 				$this->flying = false;
@@ -1402,9 +1397,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$this->inventory->sendContents($this);
 		$this->inventory->sendContents($this->getViewers());
 		$this->inventory->sendHeldItem($this->hasSpawned);
-		if($this->isCreative()){
-			$this->inventory->sendCreativeContents();
-		}
+		$this->inventory->sendCreativeContents();
 
 		return true;
 	}
@@ -1424,14 +1417,18 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	 */
 	public function sendSettings(){
 		$pk = new AdventureSettingsPacket();
-		$pk->flags = 0;
-		$pk->worldImmutable = $this->isSpectator();
-		$pk->noPvp = $this->isSpectator();
-		$pk->autoJump = $this->autoJump;
-		$pk->allowFlight = $this->allowFlight;
-		$pk->noClip = $this->isSpectator();
-		$pk->isFlying = $this->flying;
-		$pk->userPermission = ($this->isOp() ? AdventureSettingsPacket::PERMISSION_OPERATOR : AdventureSettingsPacket::PERMISSION_NORMAL);
+		
+		$pk->setFlag(AdventureSettingsPacket::WORLD_IMMUTABLE, $this->isSpectator());
+		$pk->setFlag(AdventureSettingsPacket::NO_PVP, $this->isSpectator());
+		$pk->setFlag(AdventureSettingsPacket::AUTO_JUMP, $this->autoJump);
+		$pk->setFlag(AdventureSettingsPacket::ALLOW_FLIGHT, $this->allowFlight);
+		$pk->setFlag(AdventureSettingsPacket::NO_CLIP, $this->isSpectator());
+		$pk->setFlag(AdventureSettingsPacket::FLYING, $this->flying);
+
+		$pk->commandPermission = ($this->isOp() ? AdventureSettingsPacket::PERMISSION_OPERATOR : AdventureSettingsPacket::PERMISSION_NORMAL);
+		$pk->playerPermission = ($this->isOp() ? PlayerPermissions::OPERATOR : PlayerPermissions::MEMBER);
+		$pk->entityUniqueId = $this->getId();
+		
 		$this->dataPacket($pk);
 	}
 
@@ -1503,7 +1500,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	}
 	
 
-	protected function checkGroundState($movX, $movY, $movZ, $dx, $dy, $dz){
+	protected function checkGroundState(float $movX, float $movY, float $movZ, float $dx, float $dy, float $dz){
 		if(!$this->onGround or $movY != 0){
 			$bb = clone $this->boundingBox;
 			$bb->minY = $this->y - 0.01;
@@ -1533,7 +1530,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			}
 
 			if($entity instanceof Arrow and $entity->hadCollision){
-				$item = Item::get(Item::ARROW, 0, 1);
+				$item = ItemFactory::get(Item::ARROW, 0, 1);
 				if($this->isSurvival() and !$this->inventory->canAddItem($item)){
 					continue;
 				}
@@ -1677,7 +1674,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 					if($to->distanceSquared($ev->getTo()) > 0.01){ //If plugins modify the destination
 						$this->teleport($ev->getTo());
 					}else{
-						$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->baseOffset, $this->z, $this->yaw, $this->pitch, $this->yaw);
+						$this->broadcastMovement();
 
 						$distance = $from->distance($to);
 						//TODO: check swimming (adds 0.015 exhaustion in MCPE)
@@ -1717,7 +1714,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	public function setMotion(Vector3 $mot){
 		if(parent::setMotion($mot)){
 			if($this->chunk !== null){
-				$this->level->addEntityMotion($this->chunk->getX(), $this->chunk->getZ(), $this->getId(), $this->motionX, $this->motionY, $this->motionZ);
+				$this->broadcastMotion();
 			}
 
 			if($this->motionY > 0){
@@ -1736,6 +1733,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	public function bounce(float $fallDistance){
 		//todo: airtick 추가
 	}
+	
+	protected function tryChangeMovement(){
+
+	}
 
 	public function sendAttributes(bool $sendAll = false){
 		$entries = $sendAll ? $this->attributeMap->getAll() : $this->attributeMap->needSend();
@@ -1750,7 +1751,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		}
 	}
 
-	public function onUpdate($currentTick){
+	public function onUpdate(int $currentTick) : bool{
 		if(!$this->loggedIn){
 			return false;
 		}
@@ -1779,9 +1780,10 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 
 		if($this->spawned){
 			$this->processMovement($tickDiff);
+			Timings::$timerEntityBaseTick->startTiming();
 			$this->entityBaseTick($tickDiff);
-
-			if(!$this->isSpectator()){
+			Timings::$timerEntityBaseTick->stopTiming();
+			if(!$this->isSpectator() and $this->isAlive()){
 				$this->checkNearEntities($tickDiff);
 
 				if($this->speed !== null){
@@ -1849,8 +1851,16 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			$this->batchedPackets = [];
 		}
 	}
-
-	public function canInteract(Vector3 $pos, $maxDistance, $maxDiff = 0.5){
+	/**
+	 * Returns whether the player can interact with the specified position. This checks distance and direction.
+	 *
+	 * @param Vector3 $pos
+	 * @param         $maxDistance
+	 * @param float   $maxDiff
+	 *
+	 * @return bool
+	 */
+	public function canInteract(Vector3 $pos, $maxDistance, float $maxDiff = 0.5) : bool{
 		$eyePos = $this->getPosition()->add(0, $this->getEyeHeight(), 0);
 		if($eyePos->distanceSquared($pos) > $maxDistance ** 2){
 			return false;
@@ -1862,8 +1872,15 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		return ($dot1 - $dot) >= -$maxDiff;
 	}
 
+	protected function initHumanData(){
+		//No need to do anything here, this data will be set from the login.
+	}
 
-
+	protected function initEntity(){
+		parent::initEntity();
+		$this->addDefaultWindows();
+	}
+	
 	protected function processLogin(){
 		if(!$this->server->isWhitelisted($this->iusername)){
 			$this->close($this->getLeaveMessage(), "Server is white-listed");
@@ -1875,7 +1892,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			return;
 		}
 
-		foreach($this->server->getOnlinePlayers() as $p){
+		foreach($this->server->getLoggedInPlayers() as $p){
 			if($p !== $this and $p->iusername === $this->iusername){
 				if($this->kick("logged in from another location") === false){
 					$this->close($this->getLeaveMessage(), "Logged in from another location");
@@ -1933,6 +1950,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$this->sendPlayStatus(PlayStatusPacket::LOGIN_SUCCESS);
 
 		$this->loggedIn = true;
+		$this->server->onPlayerLogin($this);
 
 		$pk = new ResourcePacksInfoPacket();
 		$manager = $this->server->getResourceManager();
@@ -1958,9 +1976,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$pk->entityUniqueId = $this->id;
 		$pk->entityRuntimeId = $this->id;
 		$pk->playerGamemode = Player::getClientFriendlyGamemode($this->gamemode);
-		$pk->x = $this->x;
-		$pk->y = $this->y + $this->baseOffset;
-		$pk->z = $this->z;
+		$pk->playerPosition = $this->getOffsetPosition($this);
 		$pk->pitch = $this->pitch;
 		$pk->yaw = $this->yaw;
 		$pk->seed = -1;
@@ -1971,7 +1987,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$pk->spawnY = $spawnPosition->getFloorY();
 		$pk->spawnZ = $spawnPosition->getFloorZ();
 		$pk->hasAchievementsDisabled = true;
-		$pk->dayCycleStopTime = -1; //TODO: implement this properly
+		$pk->time = $this->level->getTime();
 		$pk->eduMode = false;
 		$pk->rainLevel = 0; //TODO: implement these properly
 		$pk->lightningLevel = 0;
