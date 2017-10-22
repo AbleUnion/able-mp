@@ -23,59 +23,47 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\PillarRotationHelper;
 use pocketmine\item\Item;
+use pocketmine\item\Tool;
+use pocketmine\math\Vector3;
+use pocketmine\Player;
 
+class BoneBlock extends Solid{
 
-/**
- * Air block
- */
-class Air extends Transparent{
-
-	protected $id = self::AIR;
-	protected $meta = 0;
+	protected $id = Block::BONE_BLOCK;
 
 	public function __construct(int $meta = 0){
 		$this->meta = $meta;
 	}
 
 	public function getName() : string{
-		return "Air";
-	}
-
-	public function canPassThrough() : bool{
-		return true;
-	}
-
-	public function isBreakable(Item $item) : bool{
-		return false;
-	}
-
-	public function canBeFlowedInto() : bool{
-		return true;
-	}
-
-	public function canBeReplaced() : bool{
-		return true;
-	}
-
-	public function canBePlaced() : bool{
-		return false;
-	}
-
-	public function isSolid() : bool{
-		return false;
-	}
-
-	public function getBoundingBox(){
-		return null;
+		return "Bone Block";
 	}
 
 	public function getHardness() : float{
-		return -1;
+		return 2;
 	}
 
-	public function getBlastResistance() : float{
-		return 0;
+	public function getToolType() : int{
+		return Tool::TYPE_PICKAXE;
+	}
+
+	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $facePos, Player $player = null) : bool{
+		$this->meta = PillarRotationHelper::getMetaFromFace($this->meta, $face);
+		return $this->getLevel()->setBlock($blockReplace, $this, true, true);
+	}
+
+	public function getVariantBitmask() : int{
+		return 0x03;
+	}
+
+	public function getDrops(Item $item) : array{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			return parent::getDrops($item);
+		}
+
+		return [];
 	}
 
 }

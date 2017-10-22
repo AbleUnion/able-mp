@@ -21,17 +21,30 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\block;
+namespace pocketmine\block\utils;
 
-class BrownMushroom extends RedMushroom{
+class ColorBlockMetaHelper{
 
-	protected $id = self::BROWN_MUSHROOM;
+	public static function getColorFromMeta(int $meta) : string{
+		static $names = [
+			0 => "White",
+			1 => "Orange",
+			2 => "Magenta",
+			3 => "Light Blue",
+			4 => "Yellow",
+			5 => "Lime",
+			6 => "Pink",
+			7 => "Gray",
+			8 => "Light Gray",
+			9 => "Cyan",
+			10 => "Purple",
+			11 => "Blue",
+			12 => "Brown",
+			13 => "Green",
+			14 => "Red",
+			15 => "Black"
+		];
 
-	public function getName() : string{
-		return "Brown Mushroom";
-	}
-
-	public function getLightLevel() : int{
-		return 1;
+		return $names[$meta] ?? "Unknown";
 	}
 }

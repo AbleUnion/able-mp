@@ -2,80 +2,57 @@
 
 /*
  *
- *  _____            _               _____           
- * / ____|          (_)             |  __ \          
- *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
- *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
- *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
- * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
- *                         __/ |                    
- *                        |___/                     
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author GenisysPro
- * @link https://github.com/GenisysPro/GenisysPro
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
+use pocketmine\block\utils\ColorBlockMetaHelper;
+use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class Concrete extends Solid {
+class Concrete extends Solid{
 
-	protected $id = self::CONCRETE;
+	protected $id = Block::CONCRETE;
 
-	/**
-	 * Concrete constructor.
-	 *
-	 * @param int $meta
-	 */
-	public function __construct($meta = 0){
+	public function __construct(int $meta = 0){
 		$this->meta = $meta;
 	}
 
-	/**
-	 * @return float
-	 */
-	public function getHardness(){
+	public function getName() : string{
+		return ColorBlockMetaHelper::getColorFromMeta($this->meta) . " Concrete";
+	}
+
+	public function getHardness() : float{
 		return 1.8;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getToolType(){
+	public function getToolType() : int{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getName(){
-		static $names = [
-			0 => "White Concrete",
-			1 => "Orange Concrete",
-			2 => "Magenta Concrete",
-			3 => "Light Blue Concrete",
-			4 => "Yellow Concrete",
-			5 => "Lime Concrete",
-			6 => "Pink Concrete",
-			7 => "Gray Concrete",
-			8 => "Silver Concrete",
-			9 => "Cyan Concrete",
-			10 => "Purple Concrete",
-			11 => "Blue Concrete",
-			12 => "Brown Concrete",
-			13 => "Green Concrete",
-			14 => "Red Concrete",
-			15 => "Black Concrete",
-		];
-		return $names[$this->meta & 0x0f];
+	public function getDrops(Item $item) : array{
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			return parent::getDrops($item);
+		}
+
+		return [];
 	}
 
 }
