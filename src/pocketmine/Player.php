@@ -2030,7 +2030,8 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			return false;
 		}
 
-		if($packet->protocol !== ProtocolInfo::CURRENT_PROTOCOL){
+		$this->getServer()->getLogger()->info($packet->protocol);
+		if(!in_array($packet->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
 			if($packet->protocol < ProtocolInfo::CURRENT_PROTOCOL){
 				$message = "disconnectionScreen.outdatedClient";
 				$this->sendPlayStatus(PlayStatusPacket::LOGIN_FAILED_CLIENT, true);
@@ -3802,7 +3803,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function teleport(Vector3 $pos, float $yaw = null, float $pitch = null) : bool{
+	public function teleport(Vector3 $pos, $yaw = null, float $pitch = null) : bool{
 		if(parent::teleport($pos, $yaw, $pitch)){
 
 			$this->removeAllWindows();
