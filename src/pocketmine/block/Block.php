@@ -598,5 +598,5 @@ class Block extends Position implements BlockIds, Metadatable{
 	}
 	public function getMaxBounce() : float{
 		return 0;
-+	}
+	}
 }

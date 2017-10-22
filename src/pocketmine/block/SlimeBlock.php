@@ -38,14 +38,14 @@ class SlimeBlock extends Solid {
 	/**
 	 * @return bool
 	 */
-	public function hasEntityCollision(){
+	public function hasEntityCollision() : bool{
 		return true;
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getHardness(){
+	public function getHardness() : float{
 		return 0;
 	}
 

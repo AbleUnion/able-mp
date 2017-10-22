@@ -41,25 +41,25 @@ class DragonEgg extends Fallable {
 	/**
 	 * @return string
 	 */
-	public function getName(){
+	public function getName() : string{
 		return "Dragon Egg";
 	}
 	/**
 	 * @return int
 	 */
-	public function getHardness(){
+	public function getHardness() : float{
 		return 4.5;
 	}
 	/**
 	 * @return int
 	 */
-	public function getResistance(){
+	public function getResistance() : float{
 		return 45;
 	}
 	/**
 	 * @return int
 	 */
-	public function getLightLevel(){
+	public function getLightLevel() : int{
 		return 1;
 	}
 	/**
@@ -67,13 +67,13 @@ class DragonEgg extends Fallable {
 	 *
 	 * @return bool
 	 */
-	public function isBreakable(Item $item){
+	public function isBreakable(Item $item) : bool{
 		return false;
 	}
 	public function canBeActivated(): bool{
 		return true;
 	}
-	public function onActivate(Item $item, Player $player = null){
+	public function onActivate(Item $item, Player $player = null) : bool{
 		$safe = false;
 		$part = new PortalParticle($this->asPosition());
 		for($i = 0; $i < 2; ++$i){
