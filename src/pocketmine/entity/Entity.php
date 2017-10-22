@@ -1609,7 +1609,7 @@ abstract class Entity extends Location implements Metadatable{
 			$bounceDistance = (($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() < ($fallDistance * 0.7)) ? $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() : ($fallDistance * 0.7));
 			$this->motionY = 0.1 * $bounceDistance;
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
-			$ev = new EntityBounceOnBlockEvent($this,$fallDistance,$bouncedistance);
+			$ev = new EntityBounceOnBlockEvent($this,$fallDistance,$bounceDistance);
 			$ev->call();
 		}
 	}
