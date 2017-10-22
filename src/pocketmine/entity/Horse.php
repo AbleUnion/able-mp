@@ -59,7 +59,7 @@ class Horse extends Living implements Rideable{
 	public $maxhealth = 52;
 	public $maxjump = 3;
 
-	public function getName(){
+	public function getName() : string{
 		return "Horse";
 	}
 
@@ -67,9 +67,9 @@ class Horse extends Living implements Rideable{
 		$pk = new AddEntityPacket();
 		$pk->entityRuntimeId = $this->getId();
 		$pk->type = self::NETWORK_ID;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
+	
+		$pk->position = $this->asVector3();
+
 		$pk->speedX = $this->motionX;
 		$pk->speedY = $this->motionY;
 		$pk->speedZ = $this->motionZ;
@@ -87,7 +87,7 @@ class Horse extends Living implements Rideable{
 			Entity::DATA_LEAD_HOLDER_EID => [Entity::DATA_TYPE_LONG, -1],
 			Entity::DATA_SCALE => [Entity::DATA_TYPE_FLOAT, 1],
 			Entity::DATA_INTERACTIVE_TAG => [Entity::DATA_TYPE_STRING, $button],
-		];echo $button;
+		];
 		$player->dataPacket($pk);
 		$this->sendAttribute($player);
 		parent::spawnTo($player);
