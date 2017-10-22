@@ -68,7 +68,7 @@ class AddPlayerPacket extends DataPacket{
 	}
 
 	public function encodePayload(){
-		if(isset($this->eid)) $this->entityRuntimeId = $this->eid;
+		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putUUID($this->uuid);
 		$this->putString($this->username);
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);

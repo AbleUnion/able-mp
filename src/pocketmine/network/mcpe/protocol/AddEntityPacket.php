@@ -86,7 +86,7 @@ class AddEntityPacket extends DataPacket{
 	}
 
 	public function encodePayload(){
-		if(isset($this->eid)) $this->entityRuntimeId = $this->eid;
+		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putEntityUniqueId($this->entityUniqueId ?? $this->entityRuntimeId);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putUnsignedVarInt($this->type);

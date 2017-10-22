@@ -158,6 +158,7 @@ class LevelSoundEventPacket extends DataPacket{
 	}
 
 	public function encodePayload(){
+		if(isset($this->x)) $this->position = new Vector3($this->x, $this->y, $this->z);
 		$this->putByte($this->sound);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->extraData);
