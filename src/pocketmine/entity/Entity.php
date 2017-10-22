@@ -42,6 +42,7 @@ use pocketmine\entity\AI\EntityAIHurtByTarget;
 use pocketmine\entity\AI\EntityAILookIdle;
 use pocketmine\entity\AI\EntityAIWander;
 use pocketmine\entity\AI\EntityAINearestAttackableTarget;
+use pocketmine\event\entity\EntityBounceOnBlockEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDespawnEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
@@ -1608,9 +1609,9 @@ abstract class Entity extends Location implements Metadatable{
 			$bounceDistance = (($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() < ($fallDistance * 0.7)) ? $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() : ($fallDistance * 0.7));
 			$this->motionY = 0.1 * $bounceDistance;
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
+			$ev = new EntityBounceOnBlockEvent($this,$fallDistance,$bouncedistance);
+			$ev->call();
 		}
-		$ev = new EntityBounceOnBlockEvent($this,$fallDistance,$bouncedistance);
-		$ev->call();
 	}
 
 	public function handleLavaMovement(){ //TODO
