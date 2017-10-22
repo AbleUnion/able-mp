@@ -1,6 +1,6 @@
 ﻿![ABLE-MP](https://github.com/AbleUnion/able-mp/blob/master/logo.jpg)</br>
 
-# ABLE-MP for 1.1.5 [Korean / English]
+# ABLE-MP for 1.2 [Korean / English]
 
 *참조: master branch 를 제외한 branch들은 공식 지원대상이 아닙니다.
 기타 branch들은 테스트 중에 있으며 아마 불안정할겁니다. 되도록 다른 branch의 빌드 버전은 사용하지 마십시오,당신은 부작용을 숙지할 필요가 있습니다*
