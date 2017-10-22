@@ -23,47 +23,33 @@ declare(strict_types=1);
 
 namespace pocketmine\inventory;
 
-use pocketmine\item\Item;
+use pocketmine\Player;
 
-class FurnaceRecipe implements Recipe{
+class PlayerCursorInventory extends BaseInventory{
+	/** @var Player */
+	protected $holder;
 
-	/** @var Item */
-	private $output;
+	public function __construct(Player $holder){
+		parent::__construct($holder);
+	}
 
-	/** @var Item */
-	private $ingredient;
+	public function getName() : string{
+		return "Cursor";
+	}
 
-	/**
-	 * @param Item $result
-	 * @param Item $ingredient
-	 */
-	public function __construct(Item $result, Item $ingredient){
-		$this->output = clone $result;
-		$this->ingredient = clone $ingredient;
+	public function getDefaultSize() : int{
+		return 1;
+	}
+
+	public function setSize(int $size){
+		throw new \BadMethodCallException("Cursor can only carry one item at a time");
 	}
 
 	/**
-	 * @param Item $item
+	 * This override is here for documentation and code completion purposes only.
+	 * @return Player
 	 */
-	public function setInput(Item $item){
-		$this->ingredient = clone $item;
-	}
-
-	/**
-	 * @return Item
-	 */
-	public function getInput() : Item{
-		return clone $this->ingredient;
-	}
-
-	/**
-	 * @return Item
-	 */
-	public function getResult() : Item{
-		return clone $this->output;
-	}
-
-	public function registerToCraftingManager(CraftingManager $manager) {
-		$manager->registerFurnaceRecipe($this);
+	public function getHolder(){
+		return $this->holder;
 	}
 }

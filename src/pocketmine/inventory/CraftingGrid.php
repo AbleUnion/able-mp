@@ -23,47 +23,31 @@ declare(strict_types=1);
 
 namespace pocketmine\inventory;
 
-use pocketmine\item\Item;
+use pocketmine\Player;
 
-class FurnaceRecipe implements Recipe{
+class CraftingGrid extends BaseInventory{
 
-	/** @var Item */
-	private $output;
-
-	/** @var Item */
-	private $ingredient;
-
-	/**
-	 * @param Item $result
-	 * @param Item $ingredient
-	 */
-	public function __construct(Item $result, Item $ingredient){
-		$this->output = clone $result;
-		$this->ingredient = clone $ingredient;
+	public function __construct(Player $holder){
+		parent::__construct($holder);
 	}
 
-	/**
-	 * @param Item $item
-	 */
-	public function setInput(Item $item){
-		$this->ingredient = clone $item;
+	public function getDefaultSize() : int{
+		return 4;
 	}
 
-	/**
-	 * @return Item
-	 */
-	public function getInput() : Item{
-		return clone $this->ingredient;
+	public function setSize(int $size){
+		throw new \BadMethodCallException("Cannot change the size of a crafting grid");
 	}
 
-	/**
-	 * @return Item
-	 */
-	public function getResult() : Item{
-		return clone $this->output;
+	public function getName() : string{
+		return "Crafting";
 	}
 
-	public function registerToCraftingManager(CraftingManager $manager) {
-		$manager->registerFurnaceRecipe($this);
+	public function sendSlot(int $index, $target){
+		//we can't send a slot of a client-sided inventory window
+	}
+
+	public function sendContents($target) {
+		//we can't send the contents of a client-sided inventory window
 	}
 }

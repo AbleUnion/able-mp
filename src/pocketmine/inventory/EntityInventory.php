@@ -23,47 +23,28 @@ declare(strict_types=1);
 
 namespace pocketmine\inventory;
 
+use pocketmine\entity\Entity;
+use pocketmine\event\entity\EntityInventoryChangeEvent;
 use pocketmine\item\Item;
+use pocketmine\Server;
 
-class FurnaceRecipe implements Recipe{
+abstract class EntityInventory extends BaseInventory{
+	/** @var Entity */
+	protected $holder;
 
-	/** @var Item */
-	private $output;
+	protected function doSetItemEvents(int $index, Item $newItem) :Item{
+		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityInventoryChangeEvent($this->getHolder(), $this->getItem($index), $newItem, $index));
+		if($ev->isCancelled()){
+			return null;
+		}
 
-	/** @var Item */
-	private $ingredient;
-
-	/**
-	 * @param Item $result
-	 * @param Item $ingredient
-	 */
-	public function __construct(Item $result, Item $ingredient){
-		$this->output = clone $result;
-		$this->ingredient = clone $ingredient;
+		return $ev->getNewItem();
 	}
 
 	/**
-	 * @param Item $item
+	 * @return Entity|InventoryHolder
 	 */
-	public function setInput(Item $item){
-		$this->ingredient = clone $item;
-	}
-
-	/**
-	 * @return Item
-	 */
-	public function getInput() : Item{
-		return clone $this->ingredient;
-	}
-
-	/**
-	 * @return Item
-	 */
-	public function getResult() : Item{
-		return clone $this->output;
-	}
-
-	public function registerToCraftingManager(CraftingManager $manager) {
-		$manager->registerFurnaceRecipe($this);
+	public function getHolder(){
+		return parent::getHolder();
 	}
 }
