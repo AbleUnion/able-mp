@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,91 +15,42 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
+
+declare(strict_types=1);
 
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class Redstone extends RedstoneSource {
+class Redstone extends Solid{
 
 	protected $id = self::REDSTONE_BLOCK;
 
-	/**
-	 * Redstone constructor.
-	 *
-	 * @param int $meta
-	 */
-	public function __construct($meta = 0){
+	public function __construct(int $meta = 0){
 		$this->meta = $meta;
 	}
 
-	/**
-	 * @return \pocketmine\math\AxisAlignedBB
-	 */
-	public function getBoundingBox(){
-		return Block::getBoundingBox();
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canBeFlowedInto(){
-		return false;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isSolid(){
-		return true;
-	}
-
-	/**
-	 * @param Block|null $from
-	 *
-	 * @return bool
-	 */
-	public function isActivated(Block $from = null){
-		return true;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getHardness(){
+	public function getHardness() : float{
 		return 5;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getToolType(){
+	public function getToolType() : int{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getName() : string{
-		return "Block of Redstone";
+		return "Redstone Block";
 	}
 
-	/**
-	 * @param Item $item
-	 *
-	 * @return array
-	 */
 	public function getDrops(Item $item) : array{
-		if($item->isPickaxe() >= 1){
-			return [
-				[Item::REDSTONE_BLOCK, 0, 1],
-			];
-		}else{
-			return [];
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			return parent::getDrops($item);
 		}
+
+		return [];
 	}
 }

@@ -23,33 +23,15 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
+class RedstoneTorchUnlit extends Torch{
 
-class SeaLantern extends Transparent{
-
-	protected $id = self::SEA_LANTERN;
-
-	public function __construct(int $meta = 0){
-		$this->meta = $meta;
-	}
+	protected $id = self::UNLIT_REDSTONE_TORCH;
 
 	public function getName() : string{
-		return "Sea Lantern";
-	}
-
-	public function getHardness() : float{
-		return 0.3;
+		return "Unlit Redstone Torch";
 	}
 
 	public function getLightLevel() : int{
-		return 15;
+		return 0;
 	}
-
-	public function getDrops(Item $item) : array{
-		return [
-			ItemFactory::get(Item::PRISMARINE_CRYSTALS, 0, 3)
-		];
-	}
-
 }

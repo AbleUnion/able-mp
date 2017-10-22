@@ -23,33 +23,14 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
+use pocketmine\block\utils\ColorBlockMetaHelper;
 
-class SeaLantern extends Transparent{
+class StainedGlass extends Glass{
 
-	protected $id = self::SEA_LANTERN;
-
-	public function __construct(int $meta = 0){
-		$this->meta = $meta;
-	}
+	protected $id = self::STAINED_GLASS;
 
 	public function getName() : string{
-		return "Sea Lantern";
-	}
-
-	public function getHardness() : float{
-		return 0.3;
-	}
-
-	public function getLightLevel() : int{
-		return 15;
-	}
-
-	public function getDrops(Item $item) : array{
-		return [
-			ItemFactory::get(Item::PRISMARINE_CRYSTALS, 0, 3)
-		];
+		return ColorBlockMetaHelper::getColorFromMeta($this->meta) . " Stained Glass";
 	}
 
 }

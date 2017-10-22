@@ -27,7 +27,7 @@ class PoweredRail extends Rail{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Powered Rail";
 	}
 

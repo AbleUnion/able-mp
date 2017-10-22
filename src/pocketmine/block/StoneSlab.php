@@ -24,27 +24,53 @@ declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
 use pocketmine\item\Tool;
 
-class WoodenStairs extends Stair{
+class StoneSlab extends WoodenSlab{
+	const STONE = 0;
+	const SANDSTONE = 1;
+	const WOODEN = 2;
+	const COBBLESTONE = 3;
+	const BRICK = 4;
+	const STONE_BRICK = 5;
+	const QUARTZ = 6;
+	const NETHER_BRICK = 7;
+
+	protected $id = self::STONE_SLAB;
+
+	protected $doubleId = self::DOUBLE_STONE_SLAB;
 
 	public function getHardness() : float{
 		return 2;
 	}
 
-	public function getBlastResistance() : float{
-		return 15;
+	public function getName() : string{
+		static $names = [
+			self::STONE => "Stone",
+			self::SANDSTONE => "Sandstone",
+			self::WOODEN => "Wooden",
+			self::COBBLESTONE => "Cobblestone",
+			self::BRICK => "Brick",
+			self::STONE_BRICK => "Stone Brick",
+			self::QUARTZ => "Quartz",
+			self::NETHER_BRICK => "Nether Brick"
+		];
+		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
 	}
 
 	public function getToolType() : int{
-		return Tool::TYPE_AXE;
+		return Tool::TYPE_PICKAXE;
 	}
 
 	public function getDrops(Item $item) : array{
-		//TODO: Hierarchy problem (base class is for stone stairs)
-		return [
-			ItemFactory::get($this->getItemId(), $this->getDamage() & $this->getVariantBitmask(), 1)
-		];
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			return parent::getDrops($item);
+		}
+
+		return [];
+	}
+
+	public function getFuelTime() : int{
+		return 0;
 	}
 }
