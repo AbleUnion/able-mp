@@ -25,34 +25,45 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
-use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
+use pocketmine\network\mcpe\protocol\types\ContainerIds;
+#ifndef COMPILE
+use pocketmine\utils\Binary;
+#endif
 
-class MobArmorEquipmentPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::MOB_ARMOR_EQUIPMENT_PACKET;
+class PlayerHotbarPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::PLAYER_HOTBAR_PACKET;
 
 	/** @var int */
-	public $entityRuntimeId;
-	/** @var Item[] */
+	public $selectedHotbarSlot;
+	/** @var int */
+	public $windowId = ContainerIds::INVENTORY;
+	/** @var int[] */
 	public $slots = [];
+	/** @var bool */
+	public $selectHotbarSlot = true;
 
 	protected function decodePayload(){
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		for($i = 0; $i < 4; ++$i){
-			$this->slots[$i] = $this->getSlot();
+		$this->selectedHotbarSlot = $this->getUnsignedVarInt();
+		$this->windowId = $this->getByte();
+		$count = $this->getUnsignedVarInt();
+		for($i = 0; $i < $count; ++$i){
+			$this->slots[$i] = Binary::signInt($this->getUnsignedVarInt());
 		}
+		$this->selectHotbarSlot = $this->getBool();
 	}
 
 	protected function encodePayload(){
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		for($i = 0; $i < 4; ++$i){
-			$this->putSlot($this->slots[$i]);
+		$this->putUnsignedVarInt($this->selectedHotbarSlot);
+		$this->putByte($this->windowId);
+		$this->putUnsignedVarInt(count($this->slots));
+		foreach($this->slots as $slot){
+			$this->putUnsignedVarInt($slot);
 		}
+		$this->putBool($this->selectHotbarSlot);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleMobArmorEquipment($this);
+		return $session->handlePlayerHotbar($this);
 	}
-
 }

@@ -25,34 +25,32 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 
-class MobArmorEquipmentPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::MOB_ARMOR_EQUIPMENT_PACKET;
+class InventorySlotPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::INVENTORY_SLOT_PACKET;
 
 	/** @var int */
-	public $entityRuntimeId;
-	/** @var Item[] */
-	public $slots = [];
+	public $windowId;
+	/** @var int */
+	public $inventorySlot;
+	/** @var Item */
+	public $item;
 
 	protected function decodePayload(){
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		for($i = 0; $i < 4; ++$i){
-			$this->slots[$i] = $this->getSlot();
-		}
+		$this->windowId = $this->getUnsignedVarInt();
+		$this->inventorySlot = $this->getUnsignedVarInt();
+		$this->item = $this->getSlot();
 	}
 
 	protected function encodePayload(){
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		for($i = 0; $i < 4; ++$i){
-			$this->putSlot($this->slots[$i]);
-		}
+		$this->putUnsignedVarInt($this->windowId);
+		$this->putUnsignedVarInt($this->inventorySlot);
+		$this->putSlot($this->item);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleMobArmorEquipment($this);
+		return $session->handleInventorySlot($this);
 	}
-
 }

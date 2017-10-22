@@ -25,34 +25,31 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
-use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 
-class MobArmorEquipmentPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::MOB_ARMOR_EQUIPMENT_PACKET;
+class PhotoTransferPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::PHOTO_TRANSFER_PACKET;
 
-	/** @var int */
-	public $entityRuntimeId;
-	/** @var Item[] */
-	public $slots = [];
+	/** @var string */
+	public $string1;
+	/** @var string */
+	public $string2;
+	/** @var string */
+	public $string3;
 
 	protected function decodePayload(){
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		for($i = 0; $i < 4; ++$i){
-			$this->slots[$i] = $this->getSlot();
-		}
+		$this->string1 = $this->getString();
+		$this->string2 = $this->getString();
+		$this->string3 = $this->getString();
 	}
 
 	protected function encodePayload(){
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		for($i = 0; $i < 4; ++$i){
-			$this->putSlot($this->slots[$i]);
-		}
+		$this->putString($this->string1);
+		$this->putString($this->string2);
+		$this->putString($this->string3);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleMobArmorEquipment($this);
+		return $session->handlePhotoTransfer($this);
 	}
-
 }

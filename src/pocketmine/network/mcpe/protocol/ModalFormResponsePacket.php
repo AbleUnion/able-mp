@@ -25,34 +25,27 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
-use pocketmine\item\Item;
 use pocketmine\network\mcpe\NetworkSession;
 
-class MobArmorEquipmentPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::MOB_ARMOR_EQUIPMENT_PACKET;
+class ModalFormResponsePacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::MODAL_FORM_RESPONSE_PACKET;
 
 	/** @var int */
-	public $entityRuntimeId;
-	/** @var Item[] */
-	public $slots = [];
+	public $formId;
+	/** @var string */
+	public $formData; //json
 
 	protected function decodePayload(){
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		for($i = 0; $i < 4; ++$i){
-			$this->slots[$i] = $this->getSlot();
-		}
+		$this->formId = $this->getUnsignedVarInt();
+		$this->formData = $this->getString();
 	}
 
 	protected function encodePayload(){
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		for($i = 0; $i < 4; ++$i){
-			$this->putSlot($this->slots[$i]);
-		}
+		$this->putUnsignedVarInt($this->formId);
+		$this->putString($this->formData);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleMobArmorEquipment($this);
+		return $session->handleModalFormResponse($this);
 	}
-
 }

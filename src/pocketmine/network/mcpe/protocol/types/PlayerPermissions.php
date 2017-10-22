@@ -21,37 +21,13 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\network\mcpe\protocol;
+namespace pocketmine\network\mcpe\protocol\types;
 
-#include <rules/DataPacket.h>
+interface PlayerPermissions{
 
-
-use pocketmine\network\mcpe\NetworkSession;
-
-class FullChunkDataPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::FULL_CHUNK_DATA_PACKET;
-
-	/** @var int */
-	public $chunkX;
-	/** @var int */
-	public $chunkZ;
-	/** @var string */
-	public $data;
-
-	protected function decodePayload(){
-		$this->chunkX = $this->getVarInt();
-		$this->chunkZ = $this->getVarInt();
-		$this->data = $this->getString();
-	}
-
-	protected function encodePayload(){
-		$this->putVarInt($this->chunkX);
-		$this->putVarInt($this->chunkZ);
-		$this->putString($this->data);
-	}
-
-	public function handle(NetworkSession $session) : bool{
-		return $session->handleFullChunkData($this);
-	}
+	const CUSTOM = 3;
+	const OPERATOR = 2;
+	const MEMBER = 1;
+	const VISITOR = 0;
 
 }
