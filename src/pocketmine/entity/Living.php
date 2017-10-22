@@ -366,7 +366,7 @@ abstract class Living extends Entity implements Damageable{
 		$this->bounce($fallDistance);
 		if($damage > 0){
 			$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_FALL, $damage);
-			$this->attack($ev->getFinalDamage(), $ev);
+			$this->attack($ev);
 		}
 	}
 
