@@ -21,20 +21,12 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\level\generator\normal\biome;
+/**
+ * All the different object classes used in populators
+ */
+namespace pocketmine\level\generator\object;
 
-use pocketmine\block\Block;
-use pocketmine\block\BlockFactory;
 
-abstract class SnowyBiome extends NormalBiome{
+abstract class PopulatorObject{
 
-	public function __construct(){
-		$this->setGroundCover([
-			BlockFactory::get(Block::SNOW_LAYER, 0),
-			BlockFactory::get(Block::GRASS, 0),
-			BlockFactory::get(Block::DIRT, 0),
-			BlockFactory::get(Block::DIRT, 0),
-			BlockFactory::get(Block::DIRT, 0)
-		]);
-	}
 }
