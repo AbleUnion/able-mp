@@ -25,27 +25,23 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class TakeItemEntityPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::TAKE_ITEM_ENTITY_PACKET;
+class SetDefaultGameTypePacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::SET_DEFAULT_GAME_TYPE_PACKET;
 
 	/** @var int */
-	public $target;
-	/** @var int */
-	public $eid;
+	public $gamemode;
 
 	protected function decodePayload(){
-
+		$this->gamemode = $this->getVarInt();
 	}
 
 	protected function encodePayload(){
-		$this->putEntityRuntimeId($this->target);
-		$this->putEntityRuntimeId($this->eid);
+		$this->putUnsignedVarInt($this->gamemode);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleTakeItemEntity($this);
+		return $session->handleSetDefaultGameType($this);
 	}
 }

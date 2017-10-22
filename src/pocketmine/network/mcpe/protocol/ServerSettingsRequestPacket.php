@@ -25,27 +25,20 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class TakeItemEntityPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::TAKE_ITEM_ENTITY_PACKET;
-
-	/** @var int */
-	public $target;
-	/** @var int */
-	public $eid;
+class ServerSettingsRequestPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::SERVER_SETTINGS_REQUEST_PACKET;
 
 	protected function decodePayload(){
-
+		//No payload
 	}
 
 	protected function encodePayload(){
-		$this->putEntityRuntimeId($this->target);
-		$this->putEntityRuntimeId($this->eid);
+		//No payload
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleTakeItemEntity($this);
+		return $session->handleServerSettingsRequest($this);
 	}
 }
