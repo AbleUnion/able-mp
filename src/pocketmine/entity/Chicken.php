@@ -98,6 +98,9 @@ class Chicken extends Animal{
 		}
 		return true;
 	}
+	
+	public function bounce(float $fallDistance) {
+	}
 
 	public function isChickenJockey() : bool{
 		return $this->chickenJockey;

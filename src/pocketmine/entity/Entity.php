@@ -1597,6 +1597,21 @@ abstract class Entity extends Location implements Metadatable{
 	public function fall(float $fallDistance){
 
 	}
+	
+	/**
+	 * Called when a falling entity hits the bouncy blocks.
+	 *
+	 * @param float $fallDistance
+	 */
+	public function bounce(float $fallDistance){
+		if (($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() > 0) and  ($fallDistance > 0.2)) {
+			$bounceDistance = (($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() < ($fallDistance * 0.7)) ? $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))->getMaxBounce() : ($fallDistance * 0.7));
+			$this->motionY = 0.1 * $bounceDistance;
+			$this->move($this->motionX, $this->motionY, $this->motionZ);
+		}
+		$ev = new EntityBounceOnBlockEvent($this,$fallDistance,$bouncedistance);
+		$ev->call();
+	}
 
 	public function handleLavaMovement(){ //TODO
 

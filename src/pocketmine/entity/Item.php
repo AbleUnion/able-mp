@@ -135,6 +135,10 @@ class Item extends Entity{
 	protected function applyDragBeforeGravity() : bool{
 		return true;
 	}
+	
+	public function fall(float $fallDistance) {
+		$this->bounce($fallDistance);
+	}
 
 	public function saveNBT(){
 		parent::saveNBT();

@@ -341,10 +341,31 @@ abstract class Living extends Entity implements Damageable{
 	}
 
 	public function fall(float $fallDistance){
+		if($this instanceof Player and $this->isSpectator()){
+				return;
+		}
+		if($fallDistance > 3){
+			$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
+		}
+		if($this->isInsideOfWater()){
+			return;
+		}
 		$damage = floor($fallDistance - 3 - ($this->hasEffect(Effect::JUMP) ? $this->getEffect(Effect::JUMP)->getEffectLevel() : 0));
+	
+		//Get the block directly beneath the player's feet, check if it is a slime block
+		if($this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0)) instanceof SlimeBlock){
+			$damage = 0;
+		}
+		//TODO Improve
+		if($this instanceof Player){
+			if($this->getInventory()->getChestplate() instanceof Elytra){
+				$damage = 0;
+			}
+		}
+		$this->bounce($fallDistance);
 		if($damage > 0){
 			$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_FALL, $damage);
-			$this->attack($ev);
+			$this->attack($ev->getFinalDamage(), $ev);
 		}
 	}
 
