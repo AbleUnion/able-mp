@@ -1,9 +1,7 @@
 <?php
-
 declare(strict_types=1);
 
 namespace pocketmine\network\protocol;
-
-class ExplodePacket extends pocketmine\network\mcpe\protocol\ExplodePacket {
-	
-}
+$className = 'ExplodePacket';
+eval('use pocketmine\\network\\mcpe\\protocol\\' . $className);
+eval('class ' . $className . ' extends ' . $className . ' { }');
