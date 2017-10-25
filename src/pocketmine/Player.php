@@ -3803,7 +3803,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	/**
 	 * {@inheritdoc}
 	 */
-	public function teleport(Vector3 $pos, $yaw = null, $pitch = null) : bool{
+	public function teleport(Vector3 $pos,float $yaw = null,float $pitch = null) : bool{
 		if(parent::teleport($pos, $yaw, $pitch)){
 
 			$this->removeAllWindows();
