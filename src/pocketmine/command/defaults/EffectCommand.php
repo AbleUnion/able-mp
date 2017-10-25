@@ -31,7 +31,7 @@ use pocketmine\utils\TextFormat;
 
 class EffectCommand extends VanillaCommand{
 
-	public function __construct($name){
+	public function __construct(string $name){
 		parent::__construct(
 			$name,
 			"%pocketmine.command.effect.description",
@@ -40,7 +40,7 @@ class EffectCommand extends VanillaCommand{
 		$this->setPermission("pocketmine.command.effect");
 	}
 
-	public function execute(CommandSender $sender, $commandLabel, array $args){
+	public function execute(CommandSender $sender, string $commandLabel, array $args){
 		if(!$this->testPermission($sender)){
 			return true;
 		}
@@ -118,7 +118,7 @@ class EffectCommand extends VanillaCommand{
 			$effect->setDuration($duration)->setAmplifier($amplification);
 
 			$player->addEffect($effect);
-			self::broadcastCommandMessage($sender, new TranslationContainer("%commands.effect.success", [$effect->getName(), $effect->getId(), $effect->getAmplifier(), $player->getDisplayName(), $effect->getDuration() / 20]));
+			self::broadcastCommandMessage($sender, new TranslationContainer("%commands.effect.success", [$effect->getName(), $effect->getAmplifier(), $player->getDisplayName(), $effect->getDuration() / 20, $effect->getId()]));
 		}
 
 
