@@ -281,7 +281,8 @@ class Server{
 	public $limitedCreative = true;
 	public $entityAIEnabled = true;
 	public $rideableEntity = true;
-        public $redstoneEnabled = false;
+	public $oldApiPluginLoad = true;
+    public $redstoneEnabled = false;
 	
 	/*
 	 * @return string
@@ -1510,6 +1511,7 @@ class Server{
 				"LimitedCreative" => true,
 				"EntityAIEnabled" => true,
 				"RideableEntity" => true,
+				"OldAPIPluginLoad" => true,
 				"redstoneEnabled" => false,
 			]);
 
@@ -1526,6 +1528,7 @@ class Server{
 			$this->limitedCreative = $this->getProperty("LimitedCreative", true);
 			$this->entityAIEnabled = $this->getProperty("EntityAIEnabled", true);
 			$this->rideableEntity = $this->getProperty("RideableEntity", true);
+			$this->oldApiPluginLoad = $this->getProperty("OldAPIPluginLoad", true);
 			$this->redstoneEnabled = $this->getProperty("redstoneEnabled", false);
 
 			if($this->crashdump){
