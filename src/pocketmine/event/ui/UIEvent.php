@@ -1,6 +1,6 @@
 <?php
 
-namespace pocketmine\event\UI;
+namespace pocketmine\event\ui;
 
 use pocketmine\event\plugin\PluginEvent;
 use pocketmine\network\mcpe\protocol\DataPacket;
