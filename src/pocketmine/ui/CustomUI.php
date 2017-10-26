@@ -1,10 +1,10 @@
 <?php
 
-namespace pocketmine\UI;
+namespace pocketmine\ui;
 
 use pocketmine\Player;
-use pocketmine\UI\elements\Button;
-use pocketmine\UI\elements\UIElement;
+use pocketmine\ui\elements\Button;
+use pocketmine\ui\elements\UIElement;
 
 interface CustomUI{
 

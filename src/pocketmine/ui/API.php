@@ -1,6 +1,6 @@
 <?php
 
-namespace pocketmine\UI;
+namespace pocketmine\ui;
 
 use pocketmine\OfflinePlayer;
 use pocketmine\Player;

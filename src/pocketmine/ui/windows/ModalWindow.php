@@ -1,11 +1,11 @@
 <?php
 
-namespace pocketmine\UI\windows;
+namespace pocketmine\ui\windows;
 
 use Exception;
 use pocketmine\Player;
-use pocketmine\UI\CustomUI;
-use pocketmine\UI\elements\UIElement;
+use pocketmine\ui\CustomUI;
+use pocketmine\ui\elements\UIElement;
 
 class ModalWindow implements CustomUI, \JsonSerializable{
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace pocketmine\UI\elements;
+namespace pocketmine\ui\elements;
 
 use pocketmine\Player;
 

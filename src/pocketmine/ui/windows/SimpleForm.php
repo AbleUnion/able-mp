@@ -1,12 +1,12 @@
 <?php
 
-namespace pocketmine\UI\windows;
+namespace pocketmine\ui\windows;
 
 use Exception;
 use pocketmine\Player;
-use pocketmine\UI\CustomUI;
-use pocketmine\UI\elements\Button;
-use pocketmine\UI\elements\UIElement;
+use pocketmine\ui\CustomUI;
+use pocketmine\ui\elements\Button;
+use pocketmine\ui\elements\UIElement;
 
 class SimpleForm implements CustomUI, \JsonSerializable{
 
