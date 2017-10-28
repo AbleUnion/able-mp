@@ -25,7 +25,11 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
-use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\Player;
 use pocketmine\utils\Random;
 
@@ -59,13 +63,24 @@ class TNT extends Solid{
 		$this->getLevel()->setBlock($this, BlockFactory::get(Block::AIR), true);
 
 		$mot = (new Random())->nextSignedFloat() * M_PI * 2;
-		$nbt = Entity::createBaseNBT($this->add(0.5, 0, 0.5), new Vector3(-sin($mot) * 0.02, 0.2, -cos($mot) * 0.02));
-		$nbt->setByte("Fuse", $fuse);
+		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel(), new CompoundTag("", [
+			new ListTag("Pos", [
+				new DoubleTag("", $this->x + 0.5),
+				new DoubleTag("", $this->y),
+				new DoubleTag("", $this->z + 0.5)
+			]),
+			new ListTag("Motion", [
+				new DoubleTag("", -sin($mot) * 0.02),
+				new DoubleTag("", 0.2),
+				new DoubleTag("", -cos($mot) * 0.02)
+			]),
+			new ListTag("Rotation", [
+				new FloatTag("", 0),
+				new FloatTag("", 0)
+			]),
+			new ByteTag("Fuse", $fuse)
+		]));
 
-		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel(), $nbt);
-
-		if($tnt !== null){
-			$tnt->spawnToAll();
-		}
+		$tnt->spawnToAll();
 	}
 }

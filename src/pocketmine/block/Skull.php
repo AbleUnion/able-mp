@@ -27,8 +27,13 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\Skull as TileSkull;
+use pocketmine\tile\Skull as SkullTile;
+use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 
 class Skull extends Flowable{
@@ -44,10 +49,10 @@ class Skull extends Flowable{
 	}
 
 	public function getName() : string{
-		return "Mob Head";
+		return "Mob Head Block";
 	}
 
-	protected function recalculateBoundingBox() : ?AxisAlignedBB{
+	protected function recalculateBoundingBox(){
 		//TODO: different bounds depending on attached face (meta)
 		return new AxisAlignedBB(
 			$this->x + 0.25,
@@ -59,21 +64,36 @@ class Skull extends Flowable{
 		);
 	}
 
-	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null) : bool{
-		if($face === Vector3::SIDE_DOWN){
-			return false;
+	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $facePos, Player $player = null) : bool{
+		if($face !== Vector3::SIDE_DOWN){
+			$this->meta = $face;
+			if($face === Vector3::SIDE_UP){
+				$rot = floor(($player->yaw * 16 / 360) + 0.5) & 0x0F;
+			}else{
+				$rot = $face;
+			}
+			$this->getLevel()->setBlock($blockReplace, $this, true);
+			$nbt = new CompoundTag("", [
+				new StringTag("id", Tile::SKULL),
+				new ByteTag("SkullType", $item->getDamage()),
+				new ByteTag("Rot", $rot),
+				new IntTag("x", (int) $this->x),
+				new IntTag("y", (int) $this->y),
+				new IntTag("z", (int) $this->z)
+			]);
+			if($item->hasCustomName()){
+				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
+			}
+			/** @var Spawnable $tile */
+			Tile::createTile("Skull", $this->getLevel(), $nbt);
+			return true;
 		}
-
-		$this->meta = $face;
-		$this->getLevel()->setBlock($blockReplace, $this, true);
-		Tile::createTile(Tile::SKULL, $this->getLevel(), TileSkull::createNBT($this, $face, $item, $player));
-
-		return true;
+		return false;
 	}
 
 	public function getDrops(Item $item) : array{
 		$tile = $this->level->getTile($this);
-		if($tile instanceof TileSkull){
+		if($tile instanceof SkullTile){
 			return [
 				ItemFactory::get(Item::SKULL, $tile->getType(), 1)
 			];

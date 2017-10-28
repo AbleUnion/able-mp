@@ -26,7 +26,7 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class StoneSlab extends Slab{
+class StoneSlab extends WoodenSlab{
 	const STONE = 0;
 	const SANDSTONE = 1;
 	const WOODEN = 2;
@@ -38,9 +38,7 @@ class StoneSlab extends Slab{
 
 	protected $id = self::STONE_SLAB;
 
-	public function getDoubleSlabId() : int{
-		return self::DOUBLE_STONE_SLAB;
-	}
+	protected $doubleId = self::DOUBLE_STONE_SLAB;
 
 	public function getHardness() : float{
 		return 2;
@@ -57,7 +55,7 @@ class StoneSlab extends Slab{
 			self::QUARTZ => "Quartz",
 			self::NETHER_BRICK => "Nether Brick"
 		];
-		return (($this->meta & 0x08) > 0 ? "Upper " : "") . ($names[$this->getVariant()] ?? "") . " Slab";
+		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
 	}
 
 	public function getToolType() : int{
@@ -70,5 +68,9 @@ class StoneSlab extends Slab{
 		}
 
 		return [];
+	}
+
+	public function getFuelTime() : int{
+		return 0;
 	}
 }

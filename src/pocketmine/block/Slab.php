@@ -24,106 +24,55 @@ declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\math\AxisAlignedBB;
-use pocketmine\math\Vector3;
-use pocketmine\Player;
+use pocketmine\item\Tool;
 
-abstract class Slab extends Transparent{
+class Slab extends WoodenSlab{
+	const STONE = 0;
+	const SANDSTONE = 1;
+	const WOODEN = 2;
+	const COBBLESTONE = 3;
+	const BRICK = 4;
+	const STONE_BRICK = 5;
+	const QUARTZ = 6;
+	const NETHER_BRICK = 7;
 
-	public function __construct(int $meta = 0){
+	protected $id = self::STONE_SLAB;
+
+	protected $doubleId = self::DOUBLE_STONE_SLAB;
+
+	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
-	abstract public function getDoubleSlabId() : int;
-
-	public function canBePlacedAt(Block $blockReplace, Vector3 $clickVector, int $face, bool $isClickedBlock) : bool{
-		if(parent::canBePlacedAt($blockReplace, $clickVector, $face, $isClickedBlock)){
-			return true;
-		}
-
-		if($blockReplace->getId() === $this->getId() and $blockReplace->getVariant() === $this->getVariant()){
-			if(($blockReplace->getDamage() & 0x08) !== 0){ //Trying to combine with top slab
-				return $clickVector->y <= 0.5 or (!$isClickedBlock and $face === Vector3::SIDE_UP);
-			}else{
-				return $clickVector->y >= 0.5 or (!$isClickedBlock and $face === Vector3::SIDE_DOWN);
-			}
-		}
-
-		return false;
+	public function getHardness(){
+		return 2;
 	}
 
-	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null) : bool{
-		$this->meta &= 0x07;
-		if($face === Vector3::SIDE_DOWN){
-			if($blockClicked->getId() === $this->id and ($blockClicked->getDamage() & 0x08) === 0x08 and $blockClicked->getVariant() === $this->getVariant()){
-				$this->getLevel()->setBlock($blockClicked, BlockFactory::get($this->getDoubleSlabId(), $this->getVariant()), true);
-
-				return true;
-			}elseif($blockReplace->getId() === $this->id and $blockReplace->getVariant() === $this->getVariant()){
-				$this->getLevel()->setBlock($blockReplace, BlockFactory::get($this->getDoubleSlabId(), $this->getVariant()), true);
-
-				return true;
-			}else{
-				$this->meta |= 0x08;
-			}
-		}elseif($face === Vector3::SIDE_UP){
-			if($blockClicked->getId() === $this->id and ($blockClicked->getDamage() & 0x08) === 0 and $blockClicked->getVariant() === $this->getVariant()){
-				$this->getLevel()->setBlock($blockClicked, BlockFactory::get($this->getDoubleSlabId(), $this->getVariant()), true);
-
-				return true;
-			}elseif($blockReplace->getId() === $this->id and $blockReplace->getVariant() === $this->getVariant()){
-				$this->getLevel()->setBlock($blockReplace, BlockFactory::get($this->getDoubleSlabId(), $this->getVariant()), true);
-
-				return true;
-			}
-		}else{ //TODO: collision
-			if($blockReplace->getId() === $this->id){
-				if($blockReplace->getVariant() === $this->meta){
-					$this->getLevel()->setBlock($blockReplace, BlockFactory::get($this->getDoubleSlabId(), $this->getVariant()), true);
-
-					return true;
-				}
-
-				return false;
-			}else{
-				if($clickVector->y > 0.5){
-					$this->meta |= 0x08;
-				}
-			}
-		}
-
-		if($blockReplace->getId() === $this->id and $blockClicked->getVariant() !== $this->getVariant()){
-			return false;
-		}
-		$this->getLevel()->setBlock($blockReplace, $this, true, true);
-
-		return true;
+	public function getName(){
+		static $names = [
+			self::STONE => "Stone",
+			self::SANDSTONE => "Sandstone",
+			self::WOODEN => "Wooden",
+			self::COBBLESTONE => "Cobblestone",
+			self::BRICK => "Brick",
+			self::STONE_BRICK => "Stone Brick",
+			self::QUARTZ => "Quartz",
+			self::NETHER_BRICK => "Nether Brick",
+		];
+		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
 	}
 
-	public function getVariantBitmask() : int{
-		return 0x07;
+	public function getToolType(){
+		return Tool::TYPE_PICKAXE;
 	}
 
-	protected function recalculateBoundingBox() : ?AxisAlignedBB{
-
-		if(($this->meta & 0x08) > 0){
-			return new AxisAlignedBB(
-				$this->x,
-				$this->y + 0.5,
-				$this->z,
-				$this->x + 1,
-				$this->y + 1,
-				$this->z + 1
-			);
+	public function getDrops(Item $item){
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			return [
+				[$this->id, $this->meta & 0x07, 1],
+			];
 		}else{
-			return new AxisAlignedBB(
-				$this->x,
-				$this->y,
-				$this->z,
-				$this->x + 1,
-				$this->y + 0.5,
-				$this->z + 1
-			);
+			return [];
 		}
 	}
 }

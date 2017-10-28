@@ -53,7 +53,7 @@ class StoneBricks extends Solid{
 			self::CRACKED => "Cracked Stone Bricks",
 			self::CHISELED => "Chiseled Stone Bricks"
 		];
-		return $names[$this->getVariant()] ?? "Unknown";
+		return $names[$this->meta & 0x03];
 	}
 
 	public function getDrops(Item $item) : array{

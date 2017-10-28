@@ -60,7 +60,7 @@ class Stone extends Solid{
 			self::ANDESITE => "Andesite",
 			self::POLISHED_ANDESITE => "Polished Andesite"
 		];
-		return $names[$this->getVariant()] ?? "Unknown";
+		return $names[$this->meta & 0x07] ?? "Unknown";
 	}
 
 	public function getDrops(Item $item) : array{

@@ -36,6 +36,6 @@ class Wood2 extends Wood{
 			0 => "Acacia Wood",
 			1 => "Dark Oak Wood"
 		];
-		return $names[$this->getVariant()] ?? "Unknown";
+		return $names[$this->meta & 0x03] ?? "Unknown";
 	}
 }
