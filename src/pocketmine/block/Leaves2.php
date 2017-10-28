@@ -36,11 +36,11 @@ class Leaves2 extends Leaves{
 			self::ACACIA => "Acacia Leaves",
 			self::DARK_OAK => "Dark Oak Leaves"
 		];
-		return $names[$this->getVariant()] ?? "Unknown";
+		return $names[$this->meta & 0x03] ?? "Unknown";
 	}
 
 	public function getDrops(Item $item) : array{
-		$variantMeta = $this->getVariant();
+		$variantMeta = $this->getDamage() & 0x03;
 
 		if($item->isShears()){
 			return [

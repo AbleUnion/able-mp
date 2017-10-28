@@ -26,9 +26,13 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class NetherBrickFence extends Fence{
+class NetherBrickFence extends Transparent{
 
 	protected $id = self::NETHER_BRICK_FENCE;
+
+	public function __construct(int $meta = 0){
+		$this->meta = $meta;
+	}
 
 	public function getHardness() : float{
 		return 2;
@@ -42,6 +46,10 @@ class NetherBrickFence extends Fence{
 		return "Nether Brick Fence";
 	}
 
+	public function canConnect(Block $block){
+		return ($block instanceof NetherBrickFence) or ($block->isSolid() and !$block->isTransparent());
+	}
+
 	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return parent::getDrops($item);
@@ -49,4 +57,6 @@ class NetherBrickFence extends Fence{
 
 		return [];
 	}
+
+	//TODO: fix bounding boxes
 }

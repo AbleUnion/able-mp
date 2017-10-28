@@ -37,7 +37,7 @@ class IronDoor extends Door{
 	}
 
 	public function getName() : string{
-		return "Iron Door";
+		return "Iron Door Block";
 	}
 
 	public function getToolType() : int{

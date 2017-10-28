@@ -54,7 +54,7 @@ class EndPortalFrame extends Solid{
 		return false;
 	}
 
-	protected function recalculateBoundingBox() : ?AxisAlignedBB{
+	protected function recalculateBoundingBox(){
 
 		return new AxisAlignedBB(
 			$this->x,

@@ -48,7 +48,7 @@ class Sandstone extends Solid{
 			self::CHISELED => "Chiseled Sandstone",
 			self::SMOOTH => "Smooth Sandstone"
 		];
-		return $names[$this->getVariant()] ?? "Unknown";
+		return $names[$this->meta & 0x03] ?? "Unknown";
 	}
 
 	public function getToolType() : int{

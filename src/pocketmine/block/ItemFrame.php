@@ -24,8 +24,12 @@ declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\{
+	ByteTag, CompoundTag, FloatTag, IntTag, StringTag
+};
 use pocketmine\Player;
 use pocketmine\tile\ItemFrame as TileItemFrame;
 use pocketmine\tile\Tile;
@@ -46,13 +50,29 @@ class ItemFrame extends Flowable{
 	public function onActivate(Item $item, Player $player = null) : bool{
 		$tile = $this->level->getTile($this);
 		if(!($tile instanceof TileItemFrame)){
-			$tile = Tile::createTile(Tile::ITEM_FRAME, $this->getLevel(), TileItemFrame::createNBT($this));
+			$nbt = new CompoundTag("", [
+				new StringTag("id", Tile::ITEM_FRAME),
+				new IntTag("x", $this->x),
+				new IntTag("y", $this->y),
+				new IntTag("z", $this->z),
+				new FloatTag("ItemDropChance", 1.0),
+				new ByteTag("ItemRotation", 0)
+			]);
+			$tile = Tile::createTile(Tile::ITEM_FRAME, $this->getLevel(), $nbt);
 		}
 
 		if($tile->hasItem()){
 			$tile->setItemRotation(($tile->getItemRotation() + 1) % 8);
-		}elseif(!$item->isNull()){
-			$tile->setItem($item->pop());
+		}else{
+			if($item->getCount() > 0){
+				$frameItem = clone $item;
+				$frameItem->setCount(1);
+				$item->setCount($item->getCount() - 1);
+				$tile->setItem($frameItem);
+				if($player instanceof Player and $player->isSurvival()){
+					$player->getInventory()->setItemInHand($item->getCount() <= 0 ? ItemFactory::get(Item::AIR) : $item);
+				}
+			}
 		}
 
 		return true;
@@ -72,10 +92,10 @@ class ItemFrame extends Flowable{
 	public function onUpdate(int $type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$sides = [
-				0 => Vector3::SIDE_WEST,
-				1 => Vector3::SIDE_EAST,
-				2 => Vector3::SIDE_NORTH,
-				3 => Vector3::SIDE_SOUTH
+				0 => 4,
+				1 => 5,
+				2 => 2,
+				3 => 3
 			];
 			if(!$this->getSide($sides[$this->meta])->isSolid()){
 				$this->level->useBreakOn($this);
@@ -85,7 +105,7 @@ class ItemFrame extends Flowable{
 		return false;
 	}
 
-	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null) : bool{
+	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $facePos, Player $player = null) : bool{
 		if($face === Vector3::SIDE_DOWN or $face === Vector3::SIDE_UP){
 			return false;
 		}
@@ -100,7 +120,22 @@ class ItemFrame extends Flowable{
 		$this->meta = $faces[$face];
 		$this->level->setBlock($blockReplace, $this, true, true);
 
-		Tile::createTile(Tile::ITEM_FRAME, $this->getLevel(), TileItemFrame::createNBT($this, $face, $item, $player));
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::ITEM_FRAME),
+			new IntTag("x", $blockReplace->x),
+			new IntTag("y", $blockReplace->y),
+			new IntTag("z", $blockReplace->z),
+			new FloatTag("ItemDropChance", 1.0),
+			new ByteTag("ItemRotation", 0)
+		]);
+
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
+				$nbt->{$key} = $v;
+			}
+		}
+
+		Tile::createTile(Tile::ITEM_FRAME, $this->getLevel(), $nbt);
 
 		return true;
 
