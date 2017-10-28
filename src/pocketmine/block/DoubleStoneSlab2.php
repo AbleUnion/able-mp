@@ -23,23 +23,12 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\math\AxisAlignedBB;
+class DoubleStoneSlab2 extends DoubleStoneSlab{
 
-abstract class Flowable extends Transparent{
+	protected $id = self::DOUBLE_STONE_SLAB2;
 
-	public function canBeFlowedInto() : bool{
-		return true;
+	public function getSlabId() : int{
+		return self::STONE_SLAB2;
 	}
 
-	public function getHardness() : float{
-		return 0;
-	}
-
-	public function isSolid() : bool{
-		return false;
-	}
-
-	protected function recalculateBoundingBox() : ?AxisAlignedBB{
-		return null;
-	}
 }
