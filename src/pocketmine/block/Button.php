@@ -24,30 +24,28 @@ declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\item\Tool;
+use pocketmine\math\Vector3;
+use pocketmine\Player;
 
-class DoubleStoneSlab extends DoubleSlab{
+abstract class Button extends Flowable{
 
-	protected $id = self::DOUBLE_STONE_SLAB;
-
-	public function getSlabId() : int{
-		return self::STONE_SLAB;
+	public function __construct(int $meta = 0){
+		$this->meta = $meta;
 	}
 
-	public function getHardness() : float{
-		return 2;
+	public function getVariantBitmask() : int{
+		return 0;
 	}
 
-	public function getToolType() : int{
-		return Tool::TYPE_PICKAXE;
+	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null) : bool{
+		//TODO: check valid target block
+		$this->meta = $face;
+
+		return $this->level->setBlock($this, $this, true, true);
 	}
 
-	public function getDrops(Item $item) : array{
-		if($item->isPickaxe() >= Tool::TIER_WOODEN){
-			return parent::getDrops($item);
-		}
-
-		return [];
+	public function onActivate(Item $item, Player $player = null) : bool{
+		//TODO
+		return true;
 	}
-
 }
