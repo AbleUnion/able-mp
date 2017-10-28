@@ -23,49 +23,36 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\block\utils\PillarRotationHelper;
-use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\math\Vector3;
-use pocketmine\Player;
 
-class Wood extends Solid{
-	const OAK = 0;
-	const SPRUCE = 1;
-	const BIRCH = 2;
-	const JUNGLE = 3;
+class WoodenFence extends Fence{
+	const FENCE_OAK = 0;
+	const FENCE_SPRUCE = 1;
+	const FENCE_BIRCH = 2;
+	const FENCE_JUNGLE = 3;
+	const FENCE_ACACIA = 4;
+	const FENCE_DARKOAK = 5;
 
-	protected $id = self::WOOD;
-
-	public function __construct(int $meta = 0){
-		$this->meta = $meta;
-	}
+	protected $id = self::FENCE;
 
 	public function getHardness() : float{
 		return 2;
 	}
 
-	public function getName() : string{
-		static $names = [
-			self::OAK => "Oak Wood",
-			self::SPRUCE => "Spruce Wood",
-			self::BIRCH => "Birch Wood",
-			self::JUNGLE => "Jungle Wood"
-		];
-		return $names[$this->getVariant()] ?? "Unknown";
-	}
-
-	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null) : bool{
-		$this->meta = PillarRotationHelper::getMetaFromFace($this->meta, $face);
-		return $this->getLevel()->setBlock($blockReplace, $this, true, true);
-	}
-
-	public function getVariantBitmask() : int{
-		return 0x03;
-	}
-
 	public function getToolType() : int{
 		return Tool::TYPE_AXE;
+	}
+
+	public function getName() : string{
+		static $names = [
+			self::FENCE_OAK => "Oak Fence",
+			self::FENCE_SPRUCE => "Spruce Fence",
+			self::FENCE_BIRCH => "Birch Fence",
+			self::FENCE_JUNGLE => "Jungle Fence",
+			self::FENCE_ACACIA => "Acacia Fence",
+			self::FENCE_DARKOAK => "Dark Oak Fence"
+		];
+		return $names[$this->getVariant()] ?? "Unknown";
 	}
 
 	public function getFuelTime() : int{

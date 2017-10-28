@@ -23,40 +23,22 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\entity\Entity;
-use pocketmine\item\Item;
-use pocketmine\math\Vector3;
-use pocketmine\Player;
+class StoneSlab2 extends StoneSlab{
+	const TYPE_RED_SANDSTONE = 0;
+	const TYPE_PURPUR = 1;
 
-class Water extends Liquid{
+	protected $id = self::STONE_SLAB2;
 
-	protected $id = self::FLOWING_WATER;
-
-	public function __construct(int $meta = 0){
-		$this->meta = $meta;
+	public function getDoubleSlabId() : int{
+		return self::DOUBLE_STONE_SLAB2;
 	}
 
 	public function getName() : string{
-		return "Water";
-	}
+		static $names = [
+			self::TYPE_RED_SANDSTONE => "Red Sandstone",
+			self::TYPE_PURPUR => "Purpur"
+		];
 
-	public function getLightFilter() : int{
-		return 2;
-	}
-
-	public function onEntityCollide(Entity $entity) : void{
-		$entity->resetFallDistance();
-		if($entity->fireTicks > 0){
-			$entity->extinguish();
-		}
-
-		$entity->resetFallDistance();
-	}
-
-	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null) : bool{
-		$ret = $this->getLevel()->setBlock($this, $this, true, false);
-		$this->getLevel()->scheduleDelayedBlockUpdate($this, $this->tickRate());
-
-		return $ret;
+		return (($this->meta & 0x08) > 0 ? "Upper " : "") . ($names[$this->getVariant()] ?? "") . " Slab";
 	}
 }
