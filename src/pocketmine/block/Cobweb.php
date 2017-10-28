@@ -51,7 +51,7 @@ class Cobweb extends Flowable{
 		return Tool::TYPE_SWORD;
 	}
 
-	public function onEntityCollide(Entity $entity) : void{
+	public function onEntityCollide(Entity $entity){
 		$entity->resetFallDistance();
 	}
 
