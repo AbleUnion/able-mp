@@ -162,7 +162,7 @@ class SimpleCommandMap implements CommandMap{
 			$label = $command->getName();
 		}
 		$label = trim($label);
-		$fallbackPrefix = strtolower(trim($fallbackPrefix));
+		$fallbackPrefix = strtolower((string)trim($fallbackPrefix));
 
 		$registered = $this->registerAlias($command, false, $fallbackPrefix, $label);
 
@@ -304,7 +304,7 @@ class SimpleCommandMap implements CommandMap{
 
 
 				if($command === null){
-					if(strlen($bad) > 0){
+					if(strlen((string)$bad) > 0){
 						$bad .= ", ";
 					}
 					$bad .= $commandString;
@@ -323,16 +323,16 @@ class SimpleCommandMap implements CommandMap{
 				continue;
 			}
 
-			if(strlen($bad) > 0){
+			if(strlen((string)$bad) > 0){
 				$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.command.alias.notFound", [$alias, $bad]));
 				continue;
 			}
 
 			//These registered commands have absolute priority
 			if(count($targets) > 0){
-				$this->knownCommands[strtolower($alias)] = new FormattedCommandAlias(strtolower($alias), $targets);
+				$this->knownCommands[strtolower((string)$alias)] = new FormattedCommandAlias(strtolower((string)$alias), $targets);
 			}else{
-				unset($this->knownCommands[strtolower($alias)]);
+				unset($this->knownCommands[strtolower((string)$alias)]);
 			}
 
 		}
