@@ -17,10 +17,10 @@ if(Test-Path "PocketMine-MP.phar"){
 	pause
 	exit 1
 }
-	$command = $binary + " " + "src\pocketmine\updater\Updater.php"  + " --enable-ansi"
+	$command = $binary + " " + "src\pocketmine\updater\Updater.php"
 	iex $command
 function StartServer{
-	$command = $binary + " " + $file  + " --enable-ansi"
+	$command = $binary + " " + $file
     chcp 65001
 	iex $command
 }
