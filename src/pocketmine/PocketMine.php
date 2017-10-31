@@ -89,10 +89,15 @@ namespace pocketmine {
 	 * Enjoy it as much as I did writing it. I don't want to do it again.
 	 */
 
-	if(version_compare("7.0", PHP_VERSION) > 0){
-		echo "[CRITICAL] You must use PHP >= 7.0" . PHP_EOL;
-		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
-		exit(1);
+	if(version_compare("7.2", PHP_VERSION) > 0){
+		if(version_compare("7.0", PHP_VERSION) > 0){
+			echo "[CRITICAL] You must use PHP >= 7.0(Please use PHP >= 7.2 if you can)" . PHP_EOL;
+			echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
+			exit(1);
+		} else {
+			echo "[WARNING] You Recommended to use PHP >= 7.2" . PHP_EOL;
+			echo "[WARNING] It will works with poor performance" . PHP_EOL;
+		}
 	}
 
 	if(!extension_loaded("pthreads")){
@@ -425,8 +430,8 @@ namespace pocketmine {
 		if(substr_count($pthreads_version, ".") < 2){
 			$pthreads_version = "0.$pthreads_version";
 		}
-		if(version_compare($pthreads_version, "3.1.5") < 0){
-			$logger->critical("pthreads >= 3.1.5 is required, while you have $pthreads_version.");
+		if(version_compare($pthreads_version, "3.1.7-dev") < 0){
+			$logger->critical("pthreads >= 3.1.7-dev is required, while you have $pthreads_version.");
 			++$errors;
 		}
 
