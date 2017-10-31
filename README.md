@@ -12,6 +12,12 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 
 *We added CustomUI API to 'pocketmine\UI'. but,not tested yet
 
+*You can download php 7.2 from here [linux](https://jenkins.pmmp.io/job/PHP-7.2-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz)
+
+*We don't have any php 7.2 binaries for windows if you have it please give us
+
+*We want to support older php version with supporting older pthread version please help us
+
 # 기능
 * [X] 멀티 프로토콜
 * [X] mob ai
