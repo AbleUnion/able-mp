@@ -28,17 +28,17 @@ class EntityBounceOnBlockEvent extends EntityEvent {
 	private $bouncedistance;
 	
 	/**
-	 * @param Living $entity
+	 * @param Entity $entity
 	 * @param float $falldistance
 	 * @param float $bouncedistance
 	 */
-	public function __construct(Living $entity, float $falldistance, float $bouncedistance){
+	public function __construct(Entity $entity, float $falldistance, float $bouncedistance){
 		$this->entity = $entity;
 		$this->falldistance = $falldistance;
 		$this->bouncedistance = $bouncedistance;
 	}
 	/**
-	 * @return Living
+	 * @return Entity
 	 */
 	public function getEntity(){
 		return $this->entity;
