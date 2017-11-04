@@ -1,4 +1,4 @@
-<?php
+(<?php
 
 /*
  *
@@ -39,7 +39,7 @@ class PluginCommand extends Command implements PluginIdentifiableCommand{
 	 * @param Plugin $owner
 	 */
 	public function __construct($name, Plugin $owner){
-		parent::__construct($name);
+		parent::__construct((string)$name);
 		$this->owningPlugin = $owner;
 		$this->executor = $owner;
 		$this->usageMessage = "";
