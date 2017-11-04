@@ -436,9 +436,9 @@ abstract class DataPacket extends BinaryStream{
 	 * @param Vector3 $vector
 	 */
 	public function putVector3Obj(Vector3 $vector){
-		$this->putLFloat($vector->x);
-		$this->putLFloat($vector->y);
-		$this->putLFloat($vector->z);
+		$this->putLFloat((float)$vector->x);
+		$this->putLFloat((float)$vector->y);
+		$this->putLFloat((float)$vector->z);
 	}
 
 	public function getByteRotation() : float{
