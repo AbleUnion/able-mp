@@ -103,6 +103,31 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	public function getRawUniqueId() : string{
 		return $this->rawUUID;
 	}
+	/**
+
+	 * Returns a Skin object containing information about this human's skin.
+
+	 * @return Skin
+
+	 */
+
+	public function getSkin() : Skin{
+		return $this->skin;
+	}
+	/**
+	 * Sends the human's skin to the specified list of players. If null is given for targets, the skin will be sent to
+	 * all viewers.
+	 *
+	 * @param Player[]|null $targets
+	 */
+	public function sendSkin(array $targets = null) : void{
+		$pk = new PlayerSkinPacket();
+		$pk->uuid = $this->getUniqueId();
+		$pk->skin = $this->skin;
+		$this->server->broadcastPacket($targets ?? $this->hasSpawned, $pk);
+	}
+
+
 
 	/**
 	 * @param string $str
@@ -112,7 +137,6 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		if(!Player::isValidSkin($str)){
 			throw new \InvalidStateException("Specified skin is not valid, must be 8KiB or 16KiB");
 		}
-
 		$this->skin = $str;
 		$this->skinId = $skinId;
 	}
