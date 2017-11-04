@@ -1,4 +1,4 @@
-![ABLE-MP](https://github.com/AbleUnion/able-mp/blob/master/logo.jpg)</br>
+ ![ABLE-MP](https://github.com/AbleUnion/able-mp/blob/master/logo.jpg)</br>
 
 # ABLE-MP for 1.2 [Korean / English]
 
@@ -12,7 +12,7 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 
 *We added CustomUI API to 'pocketmine\UI'. but,not tested yet
 
-*You can download php 7.2 from here [linux](https://jenkins.pmmp.io/job/PHP-7.2-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz)
+*You can download php 7.2 from here [linux](https://jenkins.pmmp.io/job/PHP-7.2-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz) [Windows](https://ci.appveyor.com/api/buildjobs/ht2cilh9nujr6t38/artifacts/php-7.2.0RC5-vc15-x64.zip)
 
 *We don't have any php 7.2 binaries for windows if you have it please give us
 
