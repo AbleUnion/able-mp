@@ -23,8 +23,9 @@ declare(strict_types=1);
 
 namespace pocketmine\event\entity;
 use pocketmine\entity\Living;
+use pocketmine\event\Cancellable;
 
-class EntityBounceOnBlockEvent extends EntityEvent {
+class EntityBounceOnBlockEvent extends EntityEvent implements Cancellable{
 	private $falldistance;
 	private $bouncedistance;
 	
