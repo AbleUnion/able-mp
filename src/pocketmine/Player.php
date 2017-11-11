@@ -699,7 +699,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 	}
 
 	public function sendCommandData(){
-		/*
 		$data = [];
 		foreach($this->server->getCommandMap()->getCommands() as $command){
 			if(count($cmdData = $command->generateCustomCommandData($this)) > 0){
@@ -713,7 +712,6 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			$pk->commands = json_encode($data);
 			$this->dataPacket($pk);
 		}
-		*/
 	}
 
 	/**
