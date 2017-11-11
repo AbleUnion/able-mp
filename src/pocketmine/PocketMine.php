@@ -79,8 +79,8 @@ namespace pocketmine {
 	use raklib\RakLib;
 
 	const VERSION = "1.7dev";
-	const API_VERSION = "3.0.0-ALPHA8";
-	const CODENAME = "ABLE-mp";
+	const API_VERSION = "3.0.0-ALPHA9";
+	const CODENAME = "IRON";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
