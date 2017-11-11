@@ -2030,7 +2030,7 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 			return false;
 		}
 
-		$this->getServer()->getLogger()->info($packet->protocol);
+		$this->getServer()->getLogger()->info('protocol(' . $packet->protocol);
 		if(!in_array($packet->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
 			if($packet->protocol < ProtocolInfo::CURRENT_PROTOCOL){
 				$message = "disconnectionScreen.outdatedClient";
