@@ -52,6 +52,17 @@ class LoginPacket extends DataPacket{
 	/** @var string */
 	public $skin = "";
 
+	public $deviceModel;
+	public $deviceOS;
+	public $ui = -1;
+	public $xuid = "";
+
+	public $languageCode = "";
+	public $clientVersion = "";
+	public $skinGeometryName = "";
+	public $skinGeometryData = "";
+	public $capeData = "";
+
 	/** @var array (the "chain" index contains one or more JWTs) */
 	public $chainData = [];
 	/** @var string */
@@ -66,7 +77,7 @@ class LoginPacket extends DataPacket{
 	protected function decodePayload(){
 		$this->protocol = $this->getInt();
 
-		if(!in_array($this->protocol, ProtocolInfo::ACCEPTED_PROTOCOLS)){
+		if($this->protocol !== ProtocolInfo::CURRENT_PROTOCOL){
 			$this->buffer = null;
 			return; //Do not attempt to decode for non-accepted protocols
 		}
@@ -83,6 +94,9 @@ class LoginPacket extends DataPacket{
 				if(isset($webtoken["extraData"]["identity"])){
 					$this->clientUUID = $webtoken["extraData"]["identity"];
 				}
+				if(isset($webtoken["extraData"]["XUID"])){
+					$this->xuid = $webtoken["extraData"]["XUID"];
+				}
 				if(isset($webtoken["identityPublicKey"])){
 					$this->identityPublicKey = $webtoken["identityPublicKey"];
 				}
@@ -98,6 +112,30 @@ class LoginPacket extends DataPacket{
 
 		if(isset($this->clientData["SkinData"])){
 			$this->skin = base64_decode($this->clientData["SkinData"]);
+		} 
+		if(isset($this->clientData["DeviceModel"])){
+			$this->deviceModel = $this->clientData["DeviceModel"];
+		}
+		if(isset($this->clientData["DeviceOS"])) {
+			$this->deviceOS = $this->clientData["DeviceOS"];
+		}
+		if(isset($this->clientData["SkinGeometryName"])){
+			$this->skinGeometryName = $this->clientData["SkinGeometryName"];    
+		}
+		if(isset($this->clientData["SkinGeometry"])){
+			$this->skinGeometryData = base64_decode($this->clientData["SkinGeometry"]);  
+		}
+		if(isset($this->clientData["UIProfile"])){
+			$this->ui = $this->clientData["UIProfile"];
+		}
+		if(isset($this->clientData["LanguageCode"])){
+			$this->languageCode = $this->clientData["LanguageCode"];
+		}
+		if(isset($this->clientData["GameVersion"])){
+			$this->clientVersion = $this->clientData["GameVersion"];
+		}
+		if(isset($this->clientData["CapeData"])){
+			$this->capeData = base64_decode($this->clientData["CapeData"]);
 		}
 	}
 
