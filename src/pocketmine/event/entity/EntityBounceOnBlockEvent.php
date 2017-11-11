@@ -22,6 +22,7 @@
 declare(strict_types=1);
 
 namespace pocketmine\event\entity;
+use pocketmine\entity\Living;
 
 class EntityBounceOnBlockEvent extends EntityEvent {
 	private $falldistance;
@@ -32,7 +33,7 @@ class EntityBounceOnBlockEvent extends EntityEvent {
 	 * @param float $falldistance
 	 * @param float $bouncedistance
 	 */
-	public function __construct(Entity $entity, float $falldistance, float $bouncedistance){
+	public function __construct(Living $entity, float $falldistance, float $bouncedistance){
 		$this->entity = $entity;
 		$this->falldistance = $falldistance;
 		$this->bouncedistance = $bouncedistance;
@@ -40,7 +41,7 @@ class EntityBounceOnBlockEvent extends EntityEvent {
 	/**
 	 * @return Entity
 	 */
-	public function getEntity(){
+	public function getEntity() : Living{
 		return $this->entity;
 	}
 	/**
