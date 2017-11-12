@@ -17,8 +17,6 @@ if(Test-Path "PocketMine-MP.phar"){
 	pause
 	exit 1
 }
-	$command = $binary + " " + "src\pocketmine\updater\Updater.php"
-	iex $command
 function StartServer{
 	$command = $binary + " " + $file
     chcp 65001
