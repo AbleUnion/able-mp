@@ -8,13 +8,9 @@
 *NOTE: The master branch is the only officially-supported branch.
 All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks.*
 
-*참조: 저희는 기존 플러그인과의 호환성을 위해 "GenisysPro"와 같은(GeniAPi)를 사용하고 있습니다. 기존 플러그인과의 오류가 생긴다면 문의해주시면 감사하겠습니다.
-
 *We added CustomUI API to 'pocketmine\UI'. but,not tested yet
 
 *You can download php 7.2 from here [linux](https://jenkins.pmmp.io/job/PHP-7.2-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz) [Windows](https://ci.appveyor.com/api/buildjobs/ht2cilh9nujr6t38/artifacts/php-7.2.0RC5-vc15-x64.zip)
-
-*We don't have any php 7.2 binaries for windows if you have it please give us
 
 *We want to support older php version with supporting older pthread version please help us
 
@@ -33,10 +29,10 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 * [ ] 1.1.X 블럭들
 * [X] 모든 플러그인 자동로드
 * [ ] 자동 업뎃
-* [ ] PHP7.2
+* [X] PHP7.2
 * [X] 슬라임블럭/침대 통통 튀게
 * [X] CustomUI-API
-* [ ] Copy [this](https://github.com/pmmp/PocketMine-MP/commit/1fd999405668f069bccd63d46075155888235dd8)
+* [X] 조합오류 수정
 
 ## 서드파티 라이브러리/프로토콜 사용목록
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
@@ -66,10 +62,10 @@ All other branches are in testing and may be unstable. Do not use builds from ot
 * [ ] 1.1.X blocks
 * [X] Plugins autoload
 * [ ] auto update
-* [ ] PHP7.2
+* [X] PHP7.2
 * [X] Bouncy blocks
 * [X] CustomUI-API
-* [ ] Copy [this](https://github.com/pmmp/PocketMine-MP/commit/1fd999405668f069bccd63d46075155888235dd8)
+* [X] Fix Crafting
 
 ## Third-party Libraries/Protocols Used
 * __[PHP Sockets](http://php.net/manual/en/book.sockets.php)__
