@@ -289,7 +289,7 @@ class CraftingManager{
 	 *
 	 * @return FurnaceRecipe|null
 	 */
-	public function matchFurnaceRecipe(Item $input) : FurnaceRecipe{
+	public function matchFurnaceRecipe(Item $input) : ?FurnaceRecipe{
 		return $this->furnaceRecipes[$input->getId() . ":" . $input->getDamage()] ?? $this->furnaceRecipes[$input->getId() . ":?"] ?? null;
 	}
 
