@@ -26,6 +26,7 @@ use pocketmine\entity\Living;
 use pocketmine\event\Cancellable;
 
 class EntityBounceOnBlockEvent extends EntityEvent implements Cancellable{
+	public static $handlerList = null;
 	private $falldistance;
 	private $bouncedistance;
 	
