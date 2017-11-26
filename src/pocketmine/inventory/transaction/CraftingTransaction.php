@@ -59,7 +59,7 @@ class CraftingTransaction extends InventoryTransaction{
 
 		if($this->inputs[$y][$x]->isNull()){
 			$this->inputs[$y][$x] = clone $item;
-		}else{
+		}elseif(!$this->inputs[$y][$x]->equals($item)){
 			throw new \RuntimeException("Input $index has already been set");
 		}
 	}
