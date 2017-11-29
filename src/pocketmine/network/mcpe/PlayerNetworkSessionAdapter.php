@@ -231,10 +231,10 @@ class PlayerNetworkSessionAdapter extends NetworkSession{
 	}
 
 	public function handleModalFormResponse(ModalFormResponsePacket $packet) : bool{
-		return false; //TODO: GUI stuff
+		return $this->player->handleModalFormResponsePacket($packet);
 	}
 
 	public function handleServerSettingsRequest(ServerSettingsRequestPacket $packet) : bool{
-		return false; //TODO: GUI stuff
+		return $this->player->handleServerSettingsResponsePacket($packet);
 	}
 }
