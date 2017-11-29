@@ -70,6 +70,8 @@ use pocketmine\event\player\PlayerToggleSneakEvent;
 use pocketmine\event\player\PlayerToggleSprintEvent;
 use pocketmine\event\player\PlayerTransferEvent;
 use pocketmine\event\server\DataPacketSendEvent;
+use pocketmine\event\ui\UICloseEvent;
+use pocketmine\event\ui\UIDataReceiveEvent;
 use pocketmine\event\TextContainer;
 use pocketmine\event\Timings;
 use pocketmine\event\TranslationContainer;
@@ -139,6 +141,7 @@ use pocketmine\network\mcpe\protocol\ResourcePackDataInfoPacket;
 use pocketmine\network\mcpe\protocol\ResourcePacksInfoPacket;
 use pocketmine\network\mcpe\protocol\ResourcePackStackPacket;
 use pocketmine\network\mcpe\protocol\RespawnPacket;
+use pocketmine\network\mcpe\protocol\ServerSettingsResponsePacket;
 use pocketmine\network\mcpe\protocol\SetPlayerGameTypePacket;
 use pocketmine\network\mcpe\protocol\SetSpawnPositionPacket;
 use pocketmine\network\mcpe\protocol\SetTitlePacket;
@@ -165,6 +168,7 @@ use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\UUID;
+use pocketmine\network\mcpe\protocol\ModalFormResponsePacket;
 
 
 /**
@@ -3060,6 +3064,32 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer{
 		$pk->progress = (1048576 * $packet->chunkIndex);
 		$this->dataPacket($pk);
 		return true;
+	}
+	
+	/**
+	* @group UI Response Handling
+	* @param ModalFormResponsePacket $packet
+	* @param Player $player
+	* @return bool
+	*/
+	public function handleModalFormResponsePacket(ModalFormResponsePacket $packet): bool{
+	    $ev = new UIDataReceiveEvent($packet, $this);
+	    if (is_null($ev->getData())) $ev = new UICloseEvent($packet, $this);
+	    $this->server->getPluginManager()->callEvent($ev);
+	    return true;
+	}
+	
+	/**
+	* @group UI Response Handling
+	* @param ServerSettingsResponsePacket $packet
+	* @param Player $player
+	* @return bool
+	*/
+	public function handleServerSettingsResponsePacket(ServerSettingsResponsePacket $packet): bool{
+	    $ev = new UIDataReceiveEvent($packet, $this);
+	    if (is_null($ev->getData())) $ev = new UICloseEvent($packet, $this);
+	    $this->server->getPluginManager()->callEvent($ev);
+	    return true;
 	}
 
 	/**
