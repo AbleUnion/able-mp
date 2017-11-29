@@ -2,7 +2,6 @@
 
 namespace pocketmine\ui\windows;
 
-use Exception;
 use pocketmine\Player;
 use pocketmine\ui\CustomUI;
 use pocketmine\ui\elements\UIElement;

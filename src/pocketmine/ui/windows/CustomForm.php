@@ -22,8 +22,8 @@ class CustomForm implements CustomUI, \JsonSerializable{
 	 * CustomForm is a totally custom and dynamic form
 	 * @param $title
 	 */
-	public function __construct($title){
-		$this->title = $title;
+	public function __construct(string $title){
+		$this->title = str_replace("\r\n", '', str_replace("\r\n", '', $title));
 	}
 
 	/**

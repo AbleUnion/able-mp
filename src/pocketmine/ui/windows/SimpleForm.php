@@ -25,9 +25,9 @@ class SimpleForm implements CustomUI, \JsonSerializable{
 	 * @param string $title
 	 * @param string $content
 	 */
-	public function __construct($title, $content = ''){
-		$this->title = $title;
-		$this->content = $content;
+	public function __construct(string $title,string $content = ''){
+	    $this->title = str_replace("\r\n", '', str_replace("\n", '', $title));
+	    $this->content = str_replace("\r\n", "\n", $content);
 	}
 
 	/**
