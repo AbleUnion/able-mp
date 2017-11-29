@@ -7,8 +7,9 @@ use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\network\mcpe\protocol\ModalFormResponsePacket;
+use pocketmine\event\Event;
 
-abstract class UIEvent extends PluginEvent{
+abstract class UIEvent extends Event{
 
 	public static $handlerList = null;
 
@@ -17,10 +18,9 @@ abstract class UIEvent extends PluginEvent{
 	/** @var Player */
 	protected $player;
 
-	public function __construct(Plugin $plugin, DataPacket $packet, Player $player){
+	public function __construct(DataPacket $packet, Player $player){
 		$this->packet = $packet;
 		$this->player = $player;
-		parent::__construct($plugin);
 	}
 
 	public function getPacket(): DataPacket{
